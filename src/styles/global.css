@@ -20,6 +20,12 @@ h1 {
   margin: 1rem 0;
   font-size: 2.5rem;
 }
+
+.skill {
+  color: navy;
+  font-weight: bold;
+  text-transform: uppercase;
+}
   
 /* nav styles */
 
