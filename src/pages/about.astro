@@ -1,58 +1,69 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const pageTitle = "About Me";
-
 const identity = {
     firstName: "Simon",
+    type: "Psycho",
     country: "Sweden",
-    occupation: "Doctoral student",
+    occupation: "Doctoral Student",
     hobbies: ["birdwatching", "baking", "programming"],
 };
-
-const skills = ["Julia", "R", "Stan", "Typst", "JavaScript"];
-
-const happy = true;
-const finished = true;
-const goal = 3;
 ---
 
-<BaseLayout pageTitle={pageTitle}>
-    <h2>... and my new Astro site!</h2>
-    <p>
-        I am working through Astro's introductory tutorial. This is the second
-        page on my website, and it's the first one I built myself!
-    </p>
-    <p>
-        This site will update as I complete more of the tutorial, so keep
-        checking back and see how my journey is going!
-    </p>
-    <p>Here are a few facts about me:</p>
-    <ul>
-        <li>My name is {identity.firstName}.</li>
-        <li>
-            I live in {identity.country} and I work as a {identity.occupation}.
-        </li>
-        {
-            identity.hobbies.length >= 2 && (
-                <li>
-                    Two of my hobbies are: {identity.hobbies[0]} and{" "}
-                    {identity.hobbies[1]}
-                </li>
-            )
-        }
-    </ul>
-    <p>I can use these programming languages:</p>
-    <ul>
-        {skills.map((skill) => <li class="skill">{skill}</li>)}
-    </ul>
-    {happy && <p>I am happy to be learning Astro!</p>}
-    {finished && <p>I finished this tutorial!</p>}
-    {
-        goal === 3 ? (
-            <p>My goal is to finish in 3 days.</p>
-        ) : (
-            <p>My goal is not 3 days.</p>
-        )
-    }
-</BaseLayout>
+<BaseLayout>
+    <div class="text-center pb-5"><h1>A wild { identity.occupation } appeared!</h1></div>
+    <div class="flex justify-center items-center">
+      <div class="max-w-sm rounded overflow-hidden shadow-lg border-yellow-300" style="border-width: 0.75rem;">
+        <div class="bg-violet-300 flex flex-row items-end justify-between pt-2 pb-1 px-6">
+          <div>
+            <p class="text-xs">Basic Gamer</p>
+            <p class="text-3xl font-bold">{ identity.firstName }</p>
+          </div>
+          <div class="flex flex-row items-center justify-between gap-1">
+            <p class="font-bold">80 HP</p>
+            <img
+              width="30px",
+              src="/img/psychic_symbol.png",
+              alt="Violet circle with open eye inside"
+          />
+          </div>
+        </div>
+        <div class="bg-violet-300 px-6">
+          <img
+            class="w-full shadow-lg border-yellow-300"
+            style="border-width: 0.5rem;"
+            src="/img/memoji.png"
+            alt="Curly man with glasses looking surprised"
+          />
+        </div>
+        <div class="bg-violet-300 px-6 py-4">
+          <p class="text-gray-700 text-base py-2">
+            <strong>Aquaknarre</strong> -- and some more text.
+          </p>
+          <hr>
+          <p class="text-gray-700 text-base py-2">
+            <strong>Donnerschock</strong> -- and some more text.
+          </p>
+          <hr>
+          <p class="text-gray-700 text-base py-2">
+            <strong>Psychokinese</strong> -- and some more text.
+          </p>
+        </div>
+        <div class="bg-violet-300 px-6 pb-2">
+          <div class="pb-3"><hr></div>
+          <span
+            class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+            >#baking</span
+          >
+          <span
+            class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+            >#julia</span
+          >
+          <span
+            class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+            >#birds</span
+          >
+        </div>
+      </div>
+    </div>
+  </BaseLayout>
