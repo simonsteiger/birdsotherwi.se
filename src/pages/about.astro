@@ -20,7 +20,7 @@ const identity = {
         class="bg-violet-300 flex flex-row items-end justify-between pt-2 pb-1 px-6"
       >
         <div>
-          <p class="text-xs text-slate-700">Basic Human</p>
+          <p class="text-xs text-slate-700">Basic</p>
           <p class="text-2xl font-bold text-slate-700">{identity.firstName}</p>
         </div>
         <div class="flex flex-row items-center justify-between gap-1">
@@ -33,16 +33,13 @@ const identity = {
         </div>
       </div>
       <div class="bg-violet-300 px-6">
-        <img
-          class="w-full shadow-lg border-yellow-300"
-          style="border-width: 0.5rem;"
-          src="/img/memoji.png"
-          alt="Curly man with glasses looking surprised"
-        />
+        <div class="w-full bg-white shadow-lg border-yellow-300 aspect-[10/7]" style="border-width: 0.5rem;">
+          <!-- This div replaces the previous img element -->
+        </div>
       </div>
       <div class="bg-violet-300 px-6 py-4">
         <p
-          class="text-md text-slate-700 text-base py-2 hover:bg-violet-400 cursor-pointer transition-colors duration-200"
+          class="text-md text-slate-700 rounded text-base py-2 hover:bg-violet-400 cursor-pointer transition-colors duration-200"
           id="aquaknarre"
           data-content="Schiggy, Aquaknarre!"
         >
@@ -50,9 +47,9 @@ const identity = {
             >and some more text.</span
           >
         </p>
-        <hr />
+        <hr class="border-black border my-1" />
         <p
-          class="text-md text-slate-700 text-base py-2 hover:bg-violet-400 cursor-pointer transition-colors duration-200"
+          class="text-md text-slate-700 rounded text-base py-2 hover:bg-violet-400 cursor-pointer transition-colors duration-200"
           id="psychokinese"
           data-content="Psychokinese activated!"
         >
@@ -62,29 +59,35 @@ const identity = {
         </p>
       </div>
       <div class="bg-violet-300 px-6 pb-2">
-        <div class="pb-3"><hr /></div>
-        <span
-          class="text-xs inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 hover:bg-violet-400 cursor-pointer transition-colors duration-200"
-          id="baking"
-          data-content="Baking activated!"
-          >#baking</span
-        >
-        <span
-          class="text-xs inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 hover:bg-violet-400 cursor-pointer transition-colors duration-200"
-          id="julia"
-          data-content="Julia activated!"
-          >#julia</span
-        >
-        <span
-          class="text-xs inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 hover:bg-violet-400 cursor-pointer transition-colors duration-200"
-          id="birds"
-          data-content="Birds activated!"
-          >#birds</span
-        >
+        <hr class="border-black border" />
+        <div class="flex flex-row justify-between space-x-6 py-1">
+          <span
+            class="text-xs flex-1 text-center rounded py-1 text-sm font-semibold text-gray-700 hover:bg-violet-400 cursor-pointer transition-colors duration-200"
+            id="baking"
+            data-content="Baking activated!"
+            >weakness<br>🐩</span
+          >
+          <span
+            class="text-xs flex-1 text-center rounded py-1 text-sm font-semibold text-gray-700 hover:bg-violet-400 cursor-pointer transition-colors duration-200"
+            id="julia"
+            data-content="Julia activated!"
+            >resistance<br>🦑</span
+          >
+          <span
+            class="text-xs flex-1 text-center rounded py-1 text-sm font-semibold text-gray-700 hover:bg-violet-400 cursor-pointer transition-colors duration-200"
+            id="birds"
+            data-content="Birds activated!"
+            >retreat<br>👀</span
+          >
+        </div>
+        <div class="text-xs text-start italic px-1 py-1 border-black border-2">
+          <span>Some very random facts, maybe about hobbies, who knows, is it too long yet...?</span>
+        </div>
       </div>
+      
     </div>
     <div class="w-full md:w-2/5">
-      <div class="text-center pb-5">
+      <div class="text-start pb-5">
         <p class="sm:text-lg md:text-xl lg:text-2xl xl:text-4xl font-bold">
           A wild {identity.occupation} appeared!
         </p>
