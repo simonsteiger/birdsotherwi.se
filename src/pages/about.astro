@@ -1,5 +1,28 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Icon from "../components/Icon.astro";
+import type { iconPaths } from "../components/IconPaths";
+
+const iconLinks: {
+  label: string;
+  icon: keyof typeof iconPaths;
+}[] = [
+  { label: "game", icon: "game-controller" },
+  { label: "movie", icon: "monitor-play" },
+  { label: "bino", icon: "binoculars" },
+  { label: "fire", icon: "fire" },
+  { label: "water", icon: "water" },
+  { label: "plant", icon: "plant" },
+  { label: "psychic", icon: "psychic" },
+];
+
+const gameIcon = iconLinks.find((link) => link.label === "game");
+const movieIcon = iconLinks.find((link) => link.label === "movie");
+const binoIcon = iconLinks.find((link) => link.label === "bino");
+const fireIcon = iconLinks.find((link) => link.label === "fire");
+const waterIcon = iconLinks.find((link) => link.label === "water");
+const plantIcon = iconLinks.find((link) => link.label === "plant");
+const psychicIcon = iconLinks.find((link) => link.label === "psychic");
 
 const identity = {
   firstName: "Simon",
@@ -25,66 +48,84 @@ const identity = {
         </div>
         <div class="flex flex-row items-center justify-between gap-1">
           <p class="text-lg font-bold text-slate-700">80 HP</p>
-          <img
-            width="30px"
-            src="/img/psychic_symbol.png"
-            alt="Violet circle with open eye inside"
-          />
+          <Icon icon={psychicIcon.icon} gradient size="2em" />
         </div>
       </div>
       <div class="bg-violet-300 px-6">
-        <div class="w-full bg-white shadow-lg border-yellow-300 aspect-[10/7]" style="border-width: 0.5rem;">
+        <div
+          class="w-full bg-white shadow-lg border-yellow-300 aspect-[10/7]"
+          style="border-width: 0.5rem;"
+        >
           <!-- This div replaces the previous img element -->
         </div>
       </div>
       <div class="bg-violet-300 px-6 py-4">
         <p
-          class="text-md text-slate-700 rounded text-base py-2 hover:bg-violet-400 cursor-pointer transition-colors duration-200"
+          class="flex items-center text-md text-slate-700 rounded text-base py-2 hover:bg-violet-400 cursor-pointer transition-colors duration-200"
           id="aquaknarre"
           data-content="Schiggy, Aquaknarre!"
         >
-          <strong>Aquaknarre</strong> - <span class="text-xs"
-            >and some more text.</span
-          >
+          <span class="text-xl mr-2 flex flex-row flex-shrink-0">
+            <Icon icon={plantIcon.icon} gradient />
+            <Icon icon={waterIcon.icon} gradient />
+          </span>
+          <span class="flex items-center">
+            <strong>Aquaknarre</strong>&nbsp;-&nbsp;<span class="text-xs"
+              >and some more text.</span
+            >
+          </span>
         </p>
         <hr class="border-black border my-1" />
         <p
-          class="text-md text-slate-700 rounded text-base py-2 hover:bg-violet-400 cursor-pointer transition-colors duration-200"
+          class="flex items-center text-md text-slate-700 rounded text-base py-2 hover:bg-violet-400 cursor-pointer transition-colors duration-200"
           id="psychokinese"
           data-content="Psychokinese activated!"
         >
-          <strong>Psychokinese</strong> - <span class="text-xs"
-            >and some more text.</span
-          >
+          <span class="text-xl mr-2 flex flex-row flex-shrink-0">
+            <Icon icon={fireIcon.icon} gradient />
+            <Icon icon={psychicIcon.icon} gradient />
+          </span>
+          <span class="flex items-center">
+            <strong>Psychokinese</strong>&nbsp;-&nbsp;<span class="text-xs"
+              >and some more text.</span
+            >
+          </span>
         </p>
       </div>
       <div class="bg-violet-300 px-6 pb-2">
         <hr class="border-black border" />
         <div class="flex flex-row justify-between space-x-6 py-1">
           <span
-            class="text-xs flex-1 text-center rounded py-1 text-sm font-semibold text-gray-700 hover:bg-violet-400 cursor-pointer transition-colors duration-200"
+            class="text-xs flex-1 flex flex-col items-center justify-center text-center rounded py-1 text-sm font-semibold text-gray-700 hover:bg-violet-400 cursor-pointer transition-colors duration-200"
             id="baking"
             data-content="Baking activated!"
-            >weakness<br>🐩</span
+            >weakness{
+              binoIcon && <Icon icon={binoIcon.icon} gradient size="1.5em" />
+            }</span
           >
           <span
-            class="text-xs flex-1 text-center rounded py-1 text-sm font-semibold text-gray-700 hover:bg-violet-400 cursor-pointer transition-colors duration-200"
+            class="text-xs flex-1 flex flex-col items-center justify-center text-center rounded py-1 text-sm font-semibold text-gray-700 hover:bg-violet-400 cursor-pointer transition-colors duration-200"
             id="julia"
             data-content="Julia activated!"
-            >resistance<br>🦑</span
           >
+            resistance
+            {movieIcon && <Icon icon={movieIcon.icon} gradient size="1.5em" />}
+          </span>
           <span
-            class="text-xs flex-1 text-center rounded py-1 text-sm font-semibold text-gray-700 hover:bg-violet-400 cursor-pointer transition-colors duration-200"
+            class="text-xs flex-1 flex flex-col items-center justify-center text-center rounded py-1 text-sm font-semibold text-gray-700 hover:bg-violet-400 cursor-pointer transition-colors duration-200"
             id="birds"
             data-content="Birds activated!"
-            >retreat<br>👀</span
+            >retreat
+            {gameIcon && <Icon icon={gameIcon.icon} gradient size="1.5em" />}</span
           >
         </div>
         <div class="text-xs text-start italic px-1 py-1 border-black border-2">
-          <span>Some very random facts, maybe about hobbies, who knows, is it too long yet...?</span>
+          <span
+            >Some very random facts, maybe about hobbies, who knows, is it too
+            long yet...?</span
+          >
         </div>
       </div>
-      
     </div>
     <div class="w-full md:w-2/5">
       <div class="text-start pb-5">
@@ -102,7 +143,8 @@ const identity = {
 
 <script>
   const hoverContent = document.getElementById("hoverContent");
-  const interactiveElements = document.querySelectorAll<HTMLElement>('[data-content]');
+  const interactiveElements =
+    document.querySelectorAll<HTMLElement>("[data-content]");
 
   let activeElement = null;
 

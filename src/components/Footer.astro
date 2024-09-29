@@ -1,6 +1,16 @@
 ---
 import Icon from "./Icon.astro";
+import type { iconPaths } from "./IconPaths";
 const currentYear = new Date().getFullYear();
+
+const iconLinks: {
+  label: string;
+  href: string;
+  icon: keyof typeof iconPaths;
+}[] = [
+  { label: "ORCiD", href: "https://orcid.org/0009-0003-9745-354X", icon: "orcid-logo" },
+  { label: "GitHub", href: "https://github.com/simonsteiger", icon: "github-logo" },
+];
 ---
 
 <footer>
@@ -10,9 +20,16 @@ const currentYear = new Date().getFullYear();
         </p>
         <p>&copy; {currentYear} Simon Steiger</p>
     </div>
-    <p class="socials">
-        <a href="https://github.com/me"> GitHub</a>
-    </p>
+    <div class="socials">
+        {
+          iconLinks.map(({ href, icon, label }) => (
+            <a href={href} class="social">
+              <span class="sr-only">{label}</span>
+              <Icon icon={icon} size="2em"/>
+            </a>
+          ))
+        }
+      </div>
 </footer>
 <style>
     footer {
