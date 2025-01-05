@@ -1,14 +1,32 @@
 ---
-const { platform, dom = "com", username } = Astro.props;
+import Icon from "./Icon.astro";
+import { iconPaths } from "./IconPaths";
+
+const iconLinks: {
+  label: string;
+  icon: keyof typeof iconPaths;
+}[] = [
+  { label: "github", icon: "github-logo" },
+  { label: "orcid", icon: "orcid-logo" },
+  { label: "linkedin", icon: "linkedin-logo" },
+];
+
+const { platform, dom = "com", username, size = "2.5em" } = Astro.props;
 ---
 
-<a href={`https://www.${platform}.${dom}/${username}`}>{platform}</a>
-
 <style>
-  a {
-    padding: 0.5rem 1rem;
-    color: white;
-    background-color: #4c1d95;
-    text-decoration: none;
+  .icon-link:hover {
+    color: #AD1A72;
   }
 </style>
+
+<a
+  class="icon-link"
+  href={`https://www.${platform}.${dom}/${username}`}
+  aria-label={`An icon representing the ${platform} logo, linking to Simon Steiger's ${platform} profile.`}
+>
+  <Icon
+    icon={iconLinks.find((link) => link.label === platform)?.icon}
+    size={size}
+  />
+</a>

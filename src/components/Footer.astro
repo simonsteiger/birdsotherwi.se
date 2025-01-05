@@ -1,14 +1,23 @@
 ---
-import Social from "./Social.astro";
+import FooterElement from "./FooterElement.astro";
 ---
 
 <style>
     footer {
         display: flex;
-        gap: 1rem;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
         margin-top: 2rem;
+        font-size: smaller;
     }
 </style>
 
-<Social platform="github" username="simonsteiger" />
-<Social platform="orcid" dom="org" username="0009-0003-9745-354X" />
+<footer>
+  <div class="flex flex-row justify-center">
+    <FooterElement content="© 2025 Simon Steiger" />
+    <FooterElement content="License" />
+    <FooterElement content="Privacy Policy" />
+  </div>
+  <FooterElement content="Built with Astro 🚀" />
+</footer>

@@ -1,10 +1,19 @@
 ---
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import '../styles/global.css';
 const { pageTitle } = Astro.props;
 ---
+
+<style>
+  .vcentered {
+    display: flex;
+    flex-direction: column;
+    flex: 1 auto;
+    justify-content: center;
+  }
+</style>
 
 <html lang="en">
   <head>
@@ -13,12 +22,14 @@ const { pageTitle } = Astro.props;
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
-    <ViewTransitions />
+    <ClientRouter />
   </head>
   <body>
     <Header />
-    <h1>{pageTitle}</h1>
-    <slot />
+    <div class="vcentered">
+      <h1>{pageTitle}</h1>
+      <slot />
+    </div>
     <Footer />
     <script>
       import "../scripts/menu.js";
