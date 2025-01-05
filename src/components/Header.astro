@@ -4,6 +4,17 @@ import Hamburger from "./Hamburger.astro";
 import ThemeIcon from "./ThemeIcon.astro";
 ---
 
+<header>
+    <div class="header-inner">
+        <a class="home" href="/">$ cd /home<span class="logo_cursor"></span></a>
+        <nav class="flex flex-row items-center gap-5">
+            <Navigation />
+            <ThemeIcon />
+            <Hamburger />
+        </nav>
+    </div>
+</header>
+
 <style>
     header {
         background-color: #fafafa;
@@ -54,14 +65,3 @@ import ThemeIcon from "./ThemeIcon.astro";
         }
     }
 </style>
-
-<header>
-    <div class="header-inner">
-        <a class="home" href="/">$ cd /home<span class="logo_cursor"></span></a>
-        <nav class="flex flex-row items-center gap-5">
-            <Navigation />
-            <ThemeIcon />
-            <Hamburger />
-        </nav>
-    </div>
-</header>
