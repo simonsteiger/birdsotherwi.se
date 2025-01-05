@@ -74,6 +74,14 @@ p {
     margin-bottom: 1rem;
 }
 
+ul {
+    margin: 1rem;
+}
+
+ul li::marker {
+    content: "+"; /* FontAwesome Unicode */
+}
+
 /* content wrapper classes */
 .content {
   display: flex;
