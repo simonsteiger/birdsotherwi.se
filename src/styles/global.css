@@ -50,8 +50,14 @@ body {
 
 h1 {
     margin: 0 0 20px;
-    font-size: 2.5rem;
+    font-size: 2.625rem;
     font-weight: 700;
+}
+
+@media (max-width: 684px) {
+    h1 {
+        font-size: 2rem;
+    }
 }
 
 h2 {
@@ -146,6 +152,10 @@ p {
     border: none;
     margin: 0;
     padding: 10px;
+    background-color: #fafafa;
+}
+
+.dark .expanded {
     background-color: #252627;
 }
 
