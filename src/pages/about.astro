@@ -1,58 +1,55 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-
-const pageTitle = "About Me";
-
-const identity = {
-    firstName: "Simon",
-    country: "Sweden",
-    occupation: "Doctoral student",
-    hobbies: ["birdwatching", "baking", "programming"],
-};
-
-const skills = ["Julia", "R", "Stan", "Typst", "JavaScript"];
-
-const happy = true;
-const finished = true;
-const goal = 3;
+import { Code } from "astro:components";
+const pageTitle = "About";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-    <h2>... and my new Astro site!</h2>
-    <p>
-        I am working through Astro's introductory tutorial. This is the second
-        page on my website, and it's the first one I built myself!
-    </p>
-    <p>
-        This site will update as I complete more of the tutorial, so keep
-        checking back and see how my journey is going!
-    </p>
-    <p>Here are a few facts about me:</p>
-    <ul>
-        <li>My name is {identity.firstName}.</li>
-        <li>
-            I live in {identity.country} and I work as a {identity.occupation}.
-        </li>
-        {
-            identity.hobbies.length >= 2 && (
-                <li>
-                    Two of my hobbies are: {identity.hobbies[0]} and{" "}
-                    {identity.hobbies[1]}
-                </li>
-            )
-        }
-    </ul>
-    <p>I can use these programming languages:</p>
-    <ul>
-        {skills.map((skill) => <li class="skill">{skill}</li>)}
-    </ul>
-    {happy && <p>I am happy to be learning Astro!</p>}
-    {finished && <p>I finished this tutorial!</p>}
-    {
-        goal === 3 ? (
-            <p>My goal is to finish in 3 days.</p>
-        ) : (
-            <p>My goal is not 3 days.</p>
-        )
-    }
+    <div>
+        This is my personal website. It's pretty new, so there is not much here yet.
+        <h2>License</h2>
+        <p>
+            All content on this website is licensed under the <a
+                href="https://creativecommons.org/licenses/by/4.0/"
+                target="_blank"
+                >Creative Commons Attribution 4.0 International License</a
+            >, unless otherwise stated.
+        </p>
+        <p>
+            All code snippets on this website is licensed under the <a
+                href="https://choosealicense.com/licenses/mit/"
+                target="_blank">MIT License</a
+            >, unless otherwise stated.
+        </p>
+        <p>
+            The website is built using the <a
+                href="https://astro.build/"
+                target="_blank">web framework Astro</a
+            >.
+        </p>
+        <p>
+            The styling and theme for the website is licensed under the <a
+                href="https://choosealicense.com/licenses/mit/"
+                target="_blank">MIT License</a
+            > and it is inspired by <a
+                href="https://fredrikekre.se/"
+                target="_blank">Fredrik Ekre's website</a
+            >, which in turn is derived from from the <a
+                href="https://themes.gohugo.io/themes/hugo-theme-hello-friend-ng/"
+                ><code>hello-friend-ng theme</code></a
+            > (<a
+                href="https://choosealicense.com/licenses/mit/"
+                target="_blank">MIT License</a
+            >).
+        </p>
+    </div>
+    <div>
+        <h2>Privacy Policy</h2>
+        <p>
+            No data is collected from visitors to this website. The website is
+            hosted on Netlify. Netlify's privacy policy is available <a
+                href="https://www.netlify.com/privacy/">here</a
+            >.
+        </p>
+    </div>
 </BaseLayout>

@@ -1,0 +1,22 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import BlogPost from "../components/BlogPost.astro";
+const allPosts = await Astro.glob('./posts/*.md')
+const pageTitle = "Notes";
+---
+
+<BaseLayout pageTitle={pageTitle}>
+  <p>Some notes and notebooks.</p>
+  <h2>Notes</h2>
+  <p>Nothing here yet.</p>
+    <ul>
+      {allPosts.map((post) => post.frontmatter.draft ? null : <BlogPost url={post.url} title={post.frontmatter.title}/>)}
+    </ul>
+  <h2>Notebooks</h2>
+  <p>Richard McElreath's statistical rethinking online lectures in Julia:</p>
+  <ul>
+    <li><a href="https://learnbayes.se/statistical_rethinking/julia/02_globetossing.html" target="_blank">Lecture 2: The Garden of Forking Paths</a></li>
+    <li><a href="https://learnbayes.se/statistical_rethinking/julia/03_geocentric.html" target="_blank">Lecture 3: Geocentric models</a></li>
+    <li><a href="https://learnbayes.se/statistical_rethinking/julia/04_categories.html" target="_blank">Lecture 4: Categories and Curves</a></li>
+  </ul>
+</BaseLayout>

@@ -4,10 +4,64 @@ import Hamburger from "./Hamburger.astro";
 import ThemeIcon from "./ThemeIcon.astro";
 ---
 
+<style>
+    header {
+        background-color: #fafafa;
+        padding: 20px;
+    }
+
+    :global(.dark) header {
+        background-color: #252627;
+    }
+
+    .header-inner {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        width: 760px;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+    .home {
+        font-family: "JuliaMono-Bold";
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        font-size: 1.125rem;
+        font-weight: bold;
+        text-transform: lowercase;
+    }
+    .logo_cursor {
+        background: #ad1a72;
+        display: inline-flex;
+        width: 10px;
+        height: 1.125rem;
+        border-radius: 1px;
+        animation: cursor 1.5s infinite;
+    }
+    @keyframes cursor {
+        0% {
+            opacity: 0;
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+        }
+    }
+</style>
+
 <header>
-    <nav>
-        <Hamburger />
-        <ThemeIcon />
-        <Navigation />
-    </nav>
+    <div class="header-inner">
+        <a class="home" href="/">$ cd /home<span class="logo_cursor"></span></a>
+        <nav class="flex flex-row items-center gap-5">
+            <Navigation />
+            <ThemeIcon />
+            <Hamburger />
+        </nav>
+    </div>
 </header>

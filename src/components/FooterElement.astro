@@ -1,0 +1,11 @@
+---
+const { content } = Astro.props;
+---
+
+<style>
+  .borders:not(:last-child) {
+    border-right: 1px solid;
+  }
+</style>
+
+<div class="borders px-4" set:html={content}></div>
