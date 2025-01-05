@@ -1,3 +1,28 @@
+/* fonts */
+@font-face {
+    font-family: JuliaMono-Bold;
+    src: url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/JuliaMono-Bold.woff2");
+}
+
+@font-face {
+    font-family: JuliaMono-Light;
+    src: url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/JuliaMono-Light.woff2");
+}
+
+:root {
+    font-family: Inter, sans-serif;
+    font-feature-settings:
+        "liga" 1,
+        "calt" 1; /* fix for Chrome */
+}
+
+@supports (font-variation-settings: normal) {
+    :root {
+        font-family: InterVariable, sans-serif;
+    }
+}
+
+/* html tags */
 html {
     background-color: #fff;
     font-family: sans-serif;
@@ -43,6 +68,35 @@ p {
     margin-bottom: 1rem;
 }
 
+/* content wrapper classes */
+.content {
+  display: flex;
+  flex-direction: column;
+  flex: 1 auto;
+  justify-content: center;
+  margin: 50px 0;
+}
+
+.post {
+  width: 100%;
+  max-width: 800px;
+  text-align: left;
+  padding: 20px;
+  margin: 20px auto;
+}
+
+@media (max-width: 684px) {
+  .content {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .post {
+    max-width: 600px;
+  }
+}
+
 /* nav styles */
 
 .hamburger {
@@ -83,13 +137,16 @@ p {
 }
 
 .expanded {
-    display: unset;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
     position: absolute;
-    top: 50px;
+    top: 60px;
     right: 0;
     border: none;
     margin: 0;
     padding: 10px;
+    background-color: #252627;
 }
 
 @media screen and (min-width: 636px) {
@@ -106,28 +163,5 @@ p {
 
     .hamburger {
         display: none;
-    }
-}
-
-@font-face {
-    font-family: JuliaMono-Bold;
-    src: url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/JuliaMono-Bold.woff2");
-}
-
-@font-face {
-    font-family: JuliaMono-Light;
-    src: url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/JuliaMono-Light.woff2");
-}
-
-:root {
-    font-family: Inter, sans-serif;
-    font-feature-settings:
-        "liga" 1,
-        "calt" 1; /* fix for Chrome */
-}
-
-@supports (font-variation-settings: normal) {
-    :root {
-        font-family: InterVariable, sans-serif;
     }
 }

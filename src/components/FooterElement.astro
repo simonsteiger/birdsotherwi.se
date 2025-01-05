@@ -6,6 +6,11 @@ const { content } = Astro.props;
   .borders:not(:last-child) {
     border-right: 1px solid;
   }
+  @media (max-width: 900px) {
+    .borders:not(:last-child) {
+      border-right: none;
+    }
+  }
 </style>
 
 <div class="borders px-4" set:html={content}></div>

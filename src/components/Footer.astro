@@ -11,10 +11,21 @@ import FooterElement from "./FooterElement.astro";
         padding: 40px 20px;
         font-size: smaller;
     }
+    .footer-inner {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    }
+    @media (max-width: 900px) {
+      .footer-inner {
+        flex-direction: column;
+      }
+    }
 </style>
 
 <footer>
-  <div class="flex flex-row justify-center">
+  <div class="footer-inner">
     <FooterElement content="© 2025 <a href='https://github.com/simonsteiger'>Simon Steiger</a>" />
     <FooterElement content="<a href='/about/#license'>License</a>" />
     <FooterElement content="<a href='/about/#privacy_policy'>Privacy Policy</a>" />
