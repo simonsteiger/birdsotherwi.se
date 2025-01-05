@@ -8,4 +8,4 @@ const { content } = Astro.props;
   }
 </style>
 
-<p class="borders px-4">{ content }</p>
+<div class="borders px-4" set:html={content}></div>

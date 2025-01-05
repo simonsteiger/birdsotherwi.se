@@ -3,58 +3,67 @@ import { ClientRouter } from "astro:transitions";
 import Header from "../components/Header.astro";
 import Social from "../components/Social.astro";
 import Footer from "../components/Footer.astro";
-import '../styles/global.css';
+import "../styles/global.css";
 ---
 
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Simon Steiger</title>
-    <ClientRouter />
-  </head>
-  <body>
-    <Header />
-    <div class="centered">
-      <h1>Simon Steiger</h1> <!-- set JuliaMono font -->
-      <div class="flex flex-row gap-5">
-        <Social platform="github" username="simonsteiger" />
-        <Social platform="linkedin" username="in/steigers" />
-        <Social platform="orcid" dom="org" username="0009-0003-9745-354X" />
-      </div>
-      <div class="hover-image mt-5" />
-    </div>
-    <Footer />
-    <script>
-      import "../scripts/menu.js";
-    </script>
-  </body>
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+        <link rel="preconnect" href="https://rsms.me/" />
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+        <meta name="viewport" content="width=device-width" />
+        <meta name="generator" content={Astro.generator} />
+        <title>Simon Steiger</title>
+        <ClientRouter />
+    </head>
+    <body>
+        <Header />
+        <div class="centered">
+            <h1 class="mb-3">Simon Steiger</h1>
+            <h3 class="mb-6">
+                Epi at Karolinska Institutet, mostly birds otherwise.
+            </h3>
+            <div class="flex flex-row gap-5">
+                <Social platform="github" username="simonsteiger" />
+                <Social platform="linkedin" username="in/steigers" />
+                <Social
+                    platform="orcid"
+                    dom="org"
+                    username="0009-0003-9745-354X"
+                />
+            </div>
+            <div class="hover-image mt-6"></div>
+        </div>
+        <Footer />
+        <script>
+            import "../scripts/menu.js";
+        </script>
+    </body>
 </html>
 
 <style>
-  .centered {
-    display: flex;
-    flex-direction: column;
-    flex: 1 auto;
-    align-items: center;
-    justify-content: center;
-  }
+    .centered {
+        display: flex;
+        flex-direction: column;
+        flex: 1 auto;
+        align-items: center;
+        justify-content: center;
+    }
 
-  h1 {
-    font-family: JuliaMono-Bold;
-  }
-  .hover-image {
-    width: 100px;
-    height: 100px;
-    background-image: url('/img/wow.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    display: inline-block;
-  }
+    h1 {
+        font-family: JuliaMono-Bold;
+    }
+    .hover-image {
+        width: 100px;
+        height: 100px;
+        background-image: url("/img/wow.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        display: inline-block;
+    }
 
-  .hover-image:hover {
-    background-image: url('/img/omg.png');
-  }
+    .hover-image:hover {
+        background-image: url("/img/omg.png");
+    }
 </style>
