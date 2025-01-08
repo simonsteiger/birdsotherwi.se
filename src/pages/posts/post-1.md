@@ -6,6 +6,7 @@ pubDate: 2024-06-03
 tags: ["rheumatoid arthritis", "psoriatric arthritis", "spondyloarthritis", "composites"]
 description: >
     The use of composite scores is wide-spread and cutoffs play an essential role in classifying the disease activity of patients
+draft: true
 ---
 
 ## Rheumatoid arthritis

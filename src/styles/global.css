@@ -1,7 +1,7 @@
 /* fonts */
 @font-face {
-    font-family: JuliaMono-Bold;
-    src: url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/JuliaMono-Bold.woff2");
+    font-family: JuliaMono-Medium;
+    src: url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/JuliaMono-Medium.woff2");
 }
 
 @font-face {
@@ -27,7 +27,7 @@ html {
     background-color: #fff;
     font-family: sans-serif;
     color: #222;
-    letter-spacing: 1.5px;
+    letter-spacing: 0.06rem;
 }
 
 html.dark {
@@ -42,6 +42,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    font-weight: 200;
 }
 
 * {
@@ -64,6 +65,10 @@ h2 {
     margin: 1rem 0;
     font-size: 1.625rem;
     font-weight: 700;
+}
+
+h3 {
+    font-weight: 400;
 }
 
 a {
@@ -131,7 +136,7 @@ ul li::marker {
 
 .nav-links a {
     color: #222;
-    font-family: "JuliaMono-Bold";
+    font-family: "JuliaMono-Medium";
     display: block;
     text-align: center;
     text-decoration: none;
