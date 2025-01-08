@@ -7,7 +7,7 @@ export default {
 			// Your preferred text font. Starlight uses a system font stack by default.
 			sans: ['InterVariable'],
 			// Your preferred code font. Starlight uses system monospace fonts by default.
-			mono: ['JuliaMono-Light', 'monospace'],
+			mono: ['JuliaMono-Light', 'Consolas', 'monospace'],
 		  },
 	},
 	plugins: [],

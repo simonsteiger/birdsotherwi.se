@@ -1,26 +1,31 @@
 ---
 layout: ../../layouts/MarkdownPostLayout.astro
-title: 'My First Blog Post'
-pubDate: 2022-07-01
-description: 'This is the first post of my new Astro blog.'
-author: 'Astro Learner'
-image:
-    url: 'https://docs.astro.build/assets/rose.webp'
-    alt: 'The Astro logo on a dark background with a pink glow.'
-tags: ["astro", "blogging", "learning in public"]
+title: "Cutoffs used it Rheumatology"
+author: Simon Steiger
+pubDate: 2024-06-03
+tags: ["rheumatoid arthritis", "psoriatric arthritis", "spondyloarthritis", "composites"]
+description: >
+    The use of composite scores is wide-spread and cutoffs play an essential role in classifying the disease activity of patients
 draft: true
 ---
 
-Welcome to my _new blog_ about learning Astro! Here, I will share my learning journey as I build a new website.
+## Rheumatoid arthritis
 
-## What I've accomplished
+The composite measures are sorted alphabetically from left to right.
 
-1. **Installing Astro**: First, I created a new Astro project and set up my online accounts.
+| **Disease activity** |  **CDAI** | **DAS28CRP** | **DAS28ESR** |    **SDAI** |
+|----------------------|-----------|--------------|--------------|-------------|
+|            Remission |    $<$ 10 |      $<$ 2.4 |      $<$ 2.6 |     $<$ 3.3 |
+|                  Low | $\leq$ 10 |   $\leq$ 2.9 |   $\leq$ 3.2 | $\leq$ 11.0 |
+|             Moderate | $\leq$ 22 |   $\leq$ 4.6 |   $\leq$ 5.1 | $\leq$ 26.0 |
+|                 High |    $>$ 22 |      $>$ 4.6 |      $>$ 5.1 |    $>$ 26.0 |
 
-2. **Making Pages**: I then learned how to make pages by creating new `.astro` files and placing them in the `src/pages/` folder.
+: Cutoffs of the most commonly used composite measures for RA disease activity.
 
-3. **Making Blog Posts**: This is my first blog post! I now have Astro pages and Markdown posts!
+## Psoriatric arthritis
 
-## What's next
+T
 
-I will finish the Astro tutorial, and then keep adding more posts. Watch this space for more to come.
+## Spondyloarthritis
+
+TODO

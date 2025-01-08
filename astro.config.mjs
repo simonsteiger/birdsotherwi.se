@@ -8,9 +8,11 @@ import remarkMath from 'remark-math';
 
 import rehypeKatex from 'rehype-katex';
 
+import mdx from '@astrojs/mdx';
+
 // https://astro.build/config
 export default defineConfig({
-  integrations: [preact(), tailwind()],
+  integrations: [preact(), tailwind(), mdx()],
   markdown: {
     remarkPlugins: [remarkMath],
     rehypePlugins: [rehypeKatex],
