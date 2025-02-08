@@ -75,6 +75,10 @@ a {
     text-decoration: underline;
 }
 
+a:hover {
+    color: #ad1a72;
+}
+
 p {
     margin-bottom: 1rem;
 }
@@ -165,11 +169,11 @@ ul li::marker {
     border: none;
     margin: 0;
     padding: 10px;
-    background-color: #fafafa;
+    background-color: #F7F7F7;
 }
 
 .dark .expanded {
-    background-color: #252627;
+    background-color: #35373B;
 }
 
 @media screen and (min-width: 636px) {
@@ -191,27 +195,65 @@ ul li::marker {
 
 /* table styles */
 
+/* table styles */
+
 table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1.5rem 0;
-  font-size: 0.95rem;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
+    font-family: "JuliaMono-Light";
 }
 
 th {
-  background-color: #f8f9fa;
-  padding: 0.75rem;
-  text-align: left;
-  font-weight: 600;
-  border-bottom: 2px solid #dee2e6;
+    padding: 0.75rem;
+    text-align: left;
+    font-weight: 400;
+    border-bottom: 2px solid #222;
+    font-family: "JuliaMono-Regular";
+}
+
+.dark th {
+    border-bottom: 2px solid #EEE;
 }
 
 td {
-  padding: 0.75rem;
-  border-bottom: 1px solid #dee2e6;
-  position: relative;
+    padding: 0.75rem;
+    border-bottom: 1px solid #222;
+    position: relative;
 }
 
-tr:nth-child(even) {
-  background-color: #fafafa;
+.dark td {
+    border-bottom: 1px solid #EEE;
+}
+
+/* code */
+
+pre {
+    margin-bottom: 1rem;
+    padding: 0.8rem 1rem;
+    border-radius: 0px;
+}
+
+code {
+    display: inline-block;
+    padding: 0 0.35rem;
+    background-color: #F7F7F7;
+    letter-spacing: 0.06rem;
+}
+
+html.dark code {
+    background-color: #35373B;
+}
+
+html .astro-code,
+html .astro-code span {
+    background-color: #F7F7F7 !important;
+    letter-spacing: normal;
+}
+
+html.dark .astro-code,
+html.dark .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: #35373B !important;
 }

@@ -1,0 +1,240 @@
+---
+layout: ../../layouts/MarkdownPostLayout.astro
+title: Animating plots in Julia
+author: Simon Steiger
+pubDate: 2025-01-28
+tags: ["julia", "makie"]
+description: >
+    I simulated how age and happiness could be confounded by marital status, and
+    visualized the result with an animated plot using Makie and Observables.
+---
+
+import Aside from '@components/Aside.astro';
+import Citation from '@components/Citation.astro';
+import References from '@components/References.astro';
+import { loadCitations } from '@utils/citations';
+
+export const citations = await loadCitations('src/data/references_observables.bib');
+
+The scenario and visualization are inspired by one of Richard McElreath's <a href="https://youtu.be/mBEA7PKDmiY?si=g8OhtpCJBqMsvYuP" target="_blank">video lectures</a>.
+
+## Scenario
+
+<Aside>Are older people happier than younger people?</Aside>
+
+Hard to say!
+
+I think it's possible to come up with arguments for either side of the debate.
+Time to write a model, adjust for confounders, and see what we learn.
+
+If we assume that happier people are more likely to marry, we might therefore reason that we should also adjust for marital status $M$ when modelling happiness $H$ as a function of age $A$.
+
+We'd be working with a straightforward linear regression:
+
+```math
+H \sim \alpha + \beta_{1} A + \beta_{2} M
+```
+
+This seems reasonable, right?
+What could go wrong?
+
+Once again simplifying a lot, let's assume that as an adult person ages, they have a fixed probability to marry for each year that passes, and that this probability in influenced by how happy that person is.
+
+The probability for a person having married by time $t$ would then be:
+
+```math
+p(M_t) = 1 - (1 - f(H))^t
+```
+
+We'd expect happier individuals to marry at a younger age than unhappy individuals, which creates a spurious negative association between age and happiness.
+Oops!
+
+Among married people, those who are particularly young are more likely to be very happy, since that marrying so early is unlikely otherwise. 
+Similarly, among unmarried people, young people are also more likely to be happy -- after all, it takes some time to get married even if you're a happy person.
+
+Now, if we model happiness as a function of age _given the marital status_, our model would infer that young people are happier than older people.
+That association isn't really there, it's entirely caused by the collider!
+
+<Aside title="Marital status and happiness">
+There's a lot of research on this topic, and the evidence is pointing towards marriage having a causal effect on happiness <Citation citeKey="Coombs1991" citations={citations} />,
+and that there's little support for the selection scenario I have described above <Citation citeKey="Grover2014" citations={citations} />.
+</Aside>
+
+## Simulation
+
+It was a lot of fun to recreate the animation that McElreath showed in his video lecture. 
+It's the first animation I created with [Makie.jl](https://docs.makie.org/v0.22/) and Observables -- I can really recommend their [tutorial](https://docs.makie.org/dev/explanations/observables) on Observables if you want to learn more!
+
+First things first, let's set us up with the necessary packages.
+
+```julia
+using LogExpFunctions
+using Distributions
+using GLMakie
+using DataStructures: CircularBuffer
+```
+
+Next, we need a way to track the age, happiness, and marital status of each individual.
+
+```julia
+mutable struct Person
+    age::Float64
+    happiness::Float64
+    married::Bool
+    function Person(; age=0.0, happiness)
+        return new(age, happiness, false)
+    end
+end
+```
+
+If you've had a look at McElreath's video, he created a neat, equally spaced grid of happiness and age values.
+
+To achieve this, we have to make sure that each time we add a new "generation" to our cohort, it contains only a single person for each happiness value.
+I chose a range between -2 and 2 because I find that this makes it easier to reason about transforming happiness values to marriage probabilities.
+
+```julia
+default_range = -2:0.1:2
+
+function addbirths!(cohort::CircularBuffer; happiness_range=default_range)
+    for h in happiness_range
+        push!(cohort, Person(happiness=h))
+    end
+    return nothing
+end
+```
+
+Since we will only be plotting ages 0 to 65, we don't need to track individuals older than 65 years. 
+Using the `CircularBuffer` data structure makes this easy: if we initialize it to the right size, it'll automatically drop individuals older than 65 years each time we add a new generation.
+
+For each year that passes, we need to determine if an unmarried person married that year.
+The scaling I applied means that in a given year, an individual's probability to marry ranges from 0 to 0.04, depending on the individual's `happiness`.
+
+```julia
+function maybemarry!(person; scale=1.5, max_p=0.04)
+	p = logistic(scale * person.happiness)
+	person.married = rand(Bernoulli(p * max_p))
+	return nothing
+end
+```
+
+Let's write two functions to determine who _cannot_ marry at a given point in time: that's minors, and those who are married already.
+
+```julia
+isminor(person) = person.age < 18
+ismarried(person) = person.married
+```
+
+All that's left now is to add a function to increment a person's age by one year.
+
+```julia
+age!(person) = person.age += 1.0
+```
+
+Now we can bring together all the components we prepared into a single function that takes our simulation one `step!` forward in time.
+
+```julia
+function step!(cohort::CircularBuffer)
+    addbirths!(cohort)
+    for person in cohort
+        if ismarried(person) || isminor(person)
+            age!(person)
+            continue
+        end
+        maybemarry!(person)
+        age!(person)
+    end
+    return nothing
+end
+```
+
+Next we create our `cohort` object and fill it with people.
+
+```julia
+cohort_size = length(default_range) * max_age
+cohort = CircularBuffer{Person}(cohort_size)
+
+for i in 1:100
+	step!(cohort)
+end
+```
+
+To animate our plot, we only need to adjust the color of each point depending on whether the person with that age-happiness combination is `married` at that time in the simulation.
+
+```julia
+palette = (
+    married = colorant"#571F4E",
+    unmarried = colorant"#C8C2D6",
+    minor = colorant"#D9D9D9"
+)
+
+function colorise(person; palette=palette)
+	if ismarried(person)
+		return palette.married
+	elseif isminor(person)
+		return palette.minor
+	end
+	return palette.unmarried
+end
+```
+
+We let Makie know that it should update the plot as described above by turning `married_points` into an `Observable`.
+
+```julia
+married_points = colorise.(cohort)
+married_points = Observable(married_points)
+```
+
+Time to set up the plot!
+At this point, the plot is still static, reflecting the state of the cohort after the 100 time increments we added above.
+
+```julia
+fig = Figure()
+
+ax = Axis(fig[1, 1], xlabel="Age (years)",
+    ylabel="Happiness (z-standardised)")
+
+age_vals = getproperty(x, :age)
+happiness_vals = getproperty(x, :happiness)
+
+scatter!(ax, age_vals, happiness_vals, color=married_points)
+
+labels = ["Married", "Unmarried", "Minor"]
+elements = [PolyElement(polycolor=c) for c in values(palette)]
+Legend(fig[2, 1], elements, labels, "Marriage status", 
+    orientation=:horizontal)
+
+fig
+```
+
+To breathe life into the static plot, we need to write another stepping function, this time with the purpose of updating the `Observable` `married_points`.
+We update the values stored in an `Observable` with the special `[]` syntax.
+
+```julia
+function animstep!(cohort, married_points)
+    step!(cohort)
+    married_points[] = colorise.(cohort)
+end
+```
+
+Now we're good to go!
+Let's animate the plot for 10 seconds.
+
+```julia
+framerate = 10
+timestamps = 1:100
+
+record(fig, "animation.mp4", timestamps; framerate=framerate) do _
+    animstep!(cohort, married_points)
+end
+
+```
+
+The simulation confirms our understanding of the collider: within each of the married and unmarried groups, younger people are happier than older people.
+
+<video width="100%" controls>
+  <source src="/videos/age_happiness.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+  </source>
+</video>
+
+<References citations={citations} />

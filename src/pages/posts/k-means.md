@@ -7,12 +7,12 @@ tags: ["julia", "clustering"]
 draft: true
 #subtitle: >
 #    A step-by-step walkthrough of a simple clustering algorithm
-#description: ''
+description: A step-by-step walkthrough of a simple clustering algorithm.
 ---
 
-# In a nutshell
+## In a nutshell
 
-This is my attempt at coding $K$-means from scratch. I have used the pseudocode from [this handout](https://stanford.edu/~cpiech/cs221/handouts/kmeans.html) on AI systems as a starting point but so far not looked into optimized solutions. I can already think of a few improvements which would affect efficiency though, so this version is certainly clunkier and slower than necessary. 🐢
+This is my attempt at coding $K$-means from scratch – not with a focus on computational efficiency and speed but on understanding the algorithm.
 
 Let's begin by describing the goal of $K$-means mathematically.
 
@@ -22,13 +22,10 @@ Let's begin by describing the goal of $K$-means mathematically.
 
 In this equation, $\boldsymbol{\mu}_k$ is the center of the $k$-th cluster, and
 $z_i$ is an index of the cluster for $i$-th point $\mathbf{x}_i$.
-I have also seen $K$-means being described as a *coordinate-descent* algorithm, but I am not yet deep enough into the terminology to understand that well.
 
-# Coding K-means
+## Coding K-means
 
 I will start by laying out the general structure of the algorithm and then defining its components one by one.
-
-## Main function
 
 ```julia
 function kmeans(k, X; max_iter=1000, seed=42)
@@ -65,8 +62,6 @@ function kmeans(k, X; max_iter=1000, seed=42)
 end;
 ```
 
-## Helper functions
-
 Now that we've laid out the general logic we want the $K$-means algorithm to follow, we still need to craft a few tools to make it run.
 
 First up is an object class (called a `struct` in Julia), which will allow us to track all relevant parameters of the algorithm in a single place. This will also be the result that is returned to the user.
@@ -98,40 +93,40 @@ end
 > #### Why mutable struct?
 > Unlike `mutable structs`, pure `structs` are immutable after creation, meaning that the values stored in each field cannot be altered. The pure version would be a poor choice in our case, since we want to update the state of the algorithm at each iteration step. Therefore, we need a `mutable struct`. This type is generally less memory efficient and comes with reduced performance, but we can't avoid it here (I think)!
 
-### Initializing centroids
 
-First, we need a function which initializes random centroids at the beginning of the algorithm (but it's also very useful as a reboot when one of our centroids ends up without any observations assigned to it! 🤫).
+## Initializing centroids
 
-We'll use the `Xoshiro256++` pseudorandom number generator to manually set random seeds for initial centroids.
+First, we need a function which initializes random centroids at the beginning of the algorithm (but it's also very useful as a reboot when one of our centroids ends up without any observations assigned to it!).
 
 ```julia
 import Random: Xoshiro
-
 initcentroids(d, k; seed=42) = randn(Xoshiro(seed), d, k);
 ```
 
-### Checking convergence
+## Checking convergence
 
 We need a function which determines if the $K$-means algorithm has converged, or if it has reached the maximum number of iterations.
 
 During each iteration, this function checks for three conditions.
 
-##### 1. First iteration
-The algorithm cannot converge during the first iteration (`itr < 2`) because we define convergence as the absence of change in centroids between two consecutive evaluations. Hence, we need a second iteration to evaluate convergence.
+Are we in the first iteration? The algorithm cannot converge during the first iteration because we define convergence as the absence of change in centroids between two consecutive evaluations. Hence, we need a second iteration to evaluate convergence.
 
-##### 2. Static centroids
-I've already mentioned the second condition, which is that there is no change in centroids between two consecutive iterations. Since we want the condition to evaluate to `false`, we have to flip it and get `ctr[itr] ≠ ctr[itr-1]`.
+Have the centroids changed? I've already mentioned the second condition, which is that there is no change in centroids between two consecutive iterations.
 
-##### 3. Maximum iterations
-Finally, the algorithm should stop once it has reached the maximum number of iterations (`itr < max`).
+Have we reached the maximum number of iterations? Finally, the algorithm should stop once it has reached the maximum number of iterations.
 
 ```julia
-notconverged(ctr, itr, max) = (itr < 2 || ctr[itr] != ctr[itr-1]) && itr < max;
+function notconverged(ctr, itr, max)
+	first_itr = itr < 2
+	centroids_changed = ctr[itr] != ctr[itr-1]
+	not_max_itr = itr < max
+	return (first_itr || centroids_changed) && not_max_itr
+end
 ```
 
 Looking at the boolean algebra connecting these three conditions in the function above, we see that the algorithm will stop, i.e., `notconverged()` will return `false`, when *both* condition 1 and 2 evaluate to `false`, *or* when condition 3 evaluates to `false`.
 
-### Calculating distances
+## Calculating distances
 
 The $K$-means algorithm uses Euclidean distances between the vector of the centroid(s) and each observation. We'll use a version of the formula which generalizes to higher dimensions.
 
@@ -153,21 +148,20 @@ function pairwise(f, x, y; dims=1)
 end;
 ```
 
-### Assigning labels
+## Assigning labels
 
 We label each observation depending on which centroids it's closest to in Euclidean space.
-
-This function could be improved because it is inefficient[^1] and could be prettier [^2].
 
 ```julia
 function assign!(lab, X, ctr)
 	Δ = pairwise(euclidean, X, ctr, dims=2)
 	idxmin = findmin(Δ, dims=2)[2]
+	# could use sdim here
 	[lab[i] = idxmin[i][2] for i in eachindex(idxmin)]
 end;
 ```
 
-### Repositioning centroids
+## Repositioning centroids
 
 In each iteration, we want to reposition the centroids to the means of the observations assigned to them.
 
@@ -191,7 +185,7 @@ end;
 >#### Want a different random centroid?
 >We'll have to use a different seed than the one `initcentroids()` uses by default! Otherwise, we would initiate a new centroid in exactly the same position as the one that failed us before. I have chosen to set the seed to `iter`, so even if the reinitiation fails repeatedly, the algorithm will try with a new centroid each time. Finally, if it never succeeds, the algorithm still stops at upon reaching the maximum number of iterations.
 
-### Standardising features
+## Standardising features
 
 Features passed to $K$-means must be standardised.
 
@@ -199,9 +193,7 @@ Features passed to $K$-means must be standardised.
 standardise(x) = (x .- mean(x)) ./ std(x);
 ```
 
-So far so good! I think that's all we need.
-
-# Simulating clusters
+## Simulating clusters
 
 ... before we can take our freshly baked $K$-means algorithm out for a spin, we first need to cook up some data to play with. We will draw this data from a mixture of gaussians.
 
@@ -261,10 +253,7 @@ X = reduce(hcat, generate_multivariate_data(3000, 4, 10))
 histogram2d(X[1, :], X[2, :], bins=50)
 ```
 
-> #### What does the input to _separation_ do?
-> If you pay attention to the axes, you'll realize that this parameter simply stretches out the space in which the gaussians are located, thus pulling them apart or moving them closer together.
-
-# Proving ground
+## Proving ground
 
 Time to try our new $K$-means algorithm!
 
@@ -274,19 +263,17 @@ We first need to standardise the input matrix.
 Z = standardise(X)
 ```
 
-## And action!
-
 We will fit five clusters to this data and set a seed.
 
 ```julia
-k = 6;
-seed = 42;
+k = 6
+seed = 42
 ```
 
 Time to fit!
 
 ```julia
-fit = kmeans(k, Z, seed=seed);
+fit = kmeans(k, Z, seed=seed)
 ```
 
 We can inspect the result by looking at the different fields of `fit`. 
@@ -296,15 +283,20 @@ To check the final centroids, we would do the following:
 fit.centroids
 ```
 
-## Tracking K-means
-
 Let's look at the steps the $K$-means algorithm takes to find its solution.
 
 ```julia
 @gif for i in eachindex(fit.log_centroids)
-	scatter(Z[1, :], Z[2, :], c=fit.log_labels[i], markershape=:xcross, legend=:none)
-	scatter!(fit.log_centroids[i][1, :], fit.log_centroids[i][2, :], c=[1:k;])
+	scatter(
+		Z[1, :], Z[2, :],
+	 	color=fit.log_labels[i], shape=:xcross, legend=false
+	)
+	scatter!(
+		fit.log_centroids[i][1, :], fit.log_centroids[i][2, :],
+		color=[1:k;]
+	)
 	title!("Iteration $i")
-	xlims!(-3, 3), ylims!(-3, 3)
+	xlims!(-3, 3)
+	ylims!(-3, 3)
 end every 1 fps=15
 ```
