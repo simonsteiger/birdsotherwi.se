@@ -22,7 +22,6 @@ export async function loadCitations(path:string): Promise<CitationMap> {
       };
     });
 
-    console.log('Final citations object:', citations);
     return citations;
   } catch (error) {
     console.error('Error loading citations:', error);
