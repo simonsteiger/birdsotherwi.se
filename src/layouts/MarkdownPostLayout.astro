@@ -1,20 +1,18 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
-import TLDR from "../components/TLDR.astro";
+import Aside from "../components/Aside.astro";
 const { frontmatter } = Astro.props;
 ---
 
 <BaseLayout pageTitle={frontmatter.title}>
     <p>Published on: {frontmatter.pubDate.toString().slice(0, 10)}</p>
 
-    <TLDR>{frontmatter.description}</TLDR>
+    <Aside title="TL;DR">{frontmatter.description}</Aside>
 
     <div class="tags">
         {
             frontmatter.tags.map((tag) => (
-                <p class="tag">
-                    <a href={`/tags/${tag}`}>{tag}</a>
-                </p>
+                <a class="tag" href={`/tags/${tag}`}>{tag}</a>
             ))
         }
     </div>
@@ -33,8 +31,8 @@ const { frontmatter } = Astro.props;
 
     .tag {
         margin: 0.25rem 0.25rem 1rem 0.25rem;
-        background-color: #F5F5F5;
-        padding: 0.25rem 0.5rem;
+        background-color: #F7F7F7;
+        padding: 0.25rem 1rem;
         font-weight: 400;
         font-family: "JuliaMono-Light";
     }
@@ -49,5 +47,13 @@ const { frontmatter } = Astro.props;
 
     .tag:hover {
         color: #ad1a72;
+    }
+
+    :global(.dark) .tag:hover {
+        background-color: #3D3F43;
+    }
+
+    .tag:hover {
+        background-color: #F2F2F2;
     }
 </style>

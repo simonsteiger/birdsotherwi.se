@@ -1,0 +1,94 @@
+---
+import type { CitationMap } from '../types/citations';
+
+interface Props {
+  citeKey: string;
+  citations: CitationMap;
+}
+
+const { citeKey, citations } = Astro.props;
+const citation = citations[citeKey];
+
+if (!citation) {
+  throw new Error(`Citation not found: ${citeKey}`);
+}
+
+// Get sorted citations to determine the index
+const sortedCitations = Object.values(citations).sort((a, b) => {
+  const authorA = a.authors[0]?.split(' ').pop() || '';
+  const authorB = b.authors[0]?.split(' ').pop() || '';
+  if (authorA !== authorB) return authorA.localeCompare(authorB);
+  return a.year - b.year;
+});
+
+// Find the index of the current citation
+const citationIndex = sortedCitations.findIndex(c => 
+  c.authors === citation.authors && 
+  c.year === citation.year && 
+  c.title === citation.title
+) + 1; // Add 1 to make it 1-based instead of 0-based
+
+// Generate the reference ID
+const referenceId = `ref-${citation.authors[0]?.split(' ').pop()}-${citation.year}`;
+---
+
+<a href={`#${referenceId}`}
+  title={citation.title}
+  class="citation citation-link">
+  <span class="citation-inner">{citationIndex}</span>
+</a>
+
+<style>
+  .citation {
+    display: inline-block;
+  }
+
+  .citation-inner {
+    padding: 0 0.3rem;  
+    background-color: #F7F7F7;
+  }
+
+  .citation-inner:hover {
+    background-color: #F0F0F0;
+    color: #ad1a72;
+  }
+
+  /* Inside Aside component */
+
+  :global(.bordered) .citation-inner {
+    background-color: #F0F0F0;
+  }
+
+  :global(.bordered) .citation-inner:hover {
+    background-color: #E8E8E8;
+  }
+
+  /* Dark mode */
+
+  :global(.dark) .citation-inner {
+    background-color: #35373B;
+  }
+
+  :global(.dark) .citation-inner:hover {
+    background-color: #3D3F43;
+  }
+
+  /* Dark mode and Aside component */
+
+  :global(.dark .bordered) .citation-inner {
+    background-color: #414448;
+  }
+
+  :global(.dark .bordered) .citation-inner:hover {
+    background-color: #494B50;
+  }
+
+  .citation-link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  :global(html) {
+    scroll-behavior: smooth;
+  }
+</style>

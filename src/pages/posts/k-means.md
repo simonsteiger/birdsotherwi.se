@@ -12,7 +12,7 @@ description: A step-by-step walkthrough of a simple clustering algorithm.
 
 ## In a nutshell
 
-This is my attempt at coding $K$-means from scratch. I have used the pseudocode from [this handout](https://stanford.edu/~cpiech/cs221/handouts/kmeans.html) on AI systems as a starting point but so far not looked into optimized solutions. I can already think of a few improvements which would affect efficiency though, so this version is certainly clunkier and slower than necessary. 🐢
+This is my attempt at coding $K$-means from scratch – not with a focus on computational efficiency and speed but on understanding the algorithm.
 
 Let's begin by describing the goal of $K$-means mathematically.
 
@@ -22,7 +22,6 @@ Let's begin by describing the goal of $K$-means mathematically.
 
 In this equation, $\boldsymbol{\mu}_k$ is the center of the $k$-th cluster, and
 $z_i$ is an index of the cluster for $i$-th point $\mathbf{x}_i$.
-I have also seen $K$-means being described as a *coordinate-descent* algorithm, but I am not yet deep enough into the terminology to understand that well.
 
 ## Coding K-means
 

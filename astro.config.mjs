@@ -18,4 +18,13 @@ export default defineConfig({
     remarkPlugins: [remarkMath],
     rehypePlugins: [rehypeKatex],
   },
+  vite: {
+    resolve: {
+      alias: {
+        '@components': '/src/components',
+        '@utils': '/src/utils',
+        '@layouts': '/src/layouts',
+      },
+    },
+  },
 });

@@ -75,6 +75,10 @@ a {
     text-decoration: underline;
 }
 
+a:hover {
+    color: #ad1a72;
+}
+
 p {
     margin-bottom: 1rem;
 }
@@ -165,11 +169,11 @@ ul li::marker {
     border: none;
     margin: 0;
     padding: 10px;
-    background-color: #fafafa;
+    background-color: #F7F7F7;
 }
 
 .dark .expanded {
-    background-color: #252627;
+    background-color: #35373B;
 }
 
 @media screen and (min-width: 636px) {
@@ -231,9 +235,20 @@ pre {
     border-radius: 0px;
 }
 
+code {
+    display: inline-block;
+    padding: 0 0.35rem;
+    background-color: #F7F7F7;
+    letter-spacing: 0.06rem;
+}
+
+html.dark code {
+    background-color: #35373B;
+}
+
 html .astro-code,
 html .astro-code span {
-    background-color: #fafafa !important;
+    background-color: #F7F7F7 !important;
     letter-spacing: normal;
 }
 
