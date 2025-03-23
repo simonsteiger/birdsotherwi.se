@@ -7,8 +7,8 @@ const pageTitle = "Notes";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-  <p>Some notes and notebooks.</p>
-  <h2>Notes</h2>
+  <p>The posts are more text-heavy and the notebooks are more focused on code.</p>
+  <h2>Posts</h2>
   {
     isAllDraft ? (
       <p>Nothing here yet.</p>
@@ -39,6 +39,19 @@ const pageTitle = "Notes";
       <a
         href="https://learnbayes.se/julia/statistical_rethinking/04_categories.html"
         target="_blank">Lecture 4: Categories and Curves</a>
+    </li>
+    <li>
+      <a
+        href="https://learnbayes.se/julia/statistical_rethinking/05_confounds.html"
+        target="_blank">Lecture 5: Elemental Confounds</a>
+    </li>
+  </ul>
+  <p>Some <a href="https://turinglang.org", target="_blank">Turing.jl</a> models:</p>
+  <ul>
+    <li>
+      <a
+        href="https://learnbayes.se/julia/metaanalysis.html"
+        target="_blank">Basic tutorial on Meta Analysis</a>
     </li>
   </ul>
 </BaseLayout>
