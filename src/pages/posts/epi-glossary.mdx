@@ -16,6 +16,62 @@ import { loadCitations } from '@utils/citations';
 
 export const citations = await loadCitations('src/data/references_glossary.bib');
 
+## C
+
+### Composite disease activity scores
+
+Composite disease activity scores are mathematical devices that integrate several component scores into a single value.
+The purpose of this integration is for both the patient and clinician to better be able to track the progression of the disease.
+
+<IndentedAside title="Disease Activity Score, 28 joints">
+&rarr; DAS28
+
+The DAS28 is the most used composite score in RA.
+
+There are two versions which differ in the acute phase reactants used: DAS28CRP and DAS28ESR.
+The remaining components are identical: 28 tender joint count (&rarr; TJC28), 28 swollen joint count (&rarr; SJC28), and patient-rated global health (&rarr; PGH, 0-100 mm visual analogue scale).
+
+The disease activity score calculation differs depending on which acute phase reactant was used:
+
+```math
+\begin{aligned}
+\text{DAS28ESR} &= 0.56 \sqrt{\text{TJC28}} + 0.28 \sqrt{\text{SJC28}} + 0.70 \text{ln}(\text{ESR}) + 0.014 \text{PGH} \\
+\text{DAS28CRP} &= 0.56 \sqrt{\text{TJC28}} + 0.28 \sqrt{\text{SJC28}} + 0.36 \text{ln}(\text{CRP + 1}) + 0.014 \text{PGH} \\
+\end{aligned}
+```
+</IndentedAside>
+
+<IndentedAside title="Clinical Disease Activity Index">
+&rarr; CDAI
+
+The CDAI does not require an acute phase reactant and can therefore be calculated right away when the patient visits the clinic.
+
+The component scores are TJC28, SJC28, PGH, and evaluator-rated global health (&rarr; EGH, 0-10 cm visual analogue scale).
+
+To calculate the CDAI score, the clinician simply adds up the component scores.
+</IndentedAside>
+
+<IndentedAside title="Simplified Disease Activity Index">
+&rarr; SDAI
+
+The component scores are TJC28, SJC28, CRP, PGH, and EGH (0-10 cm).
+
+To calculate the SDAI score, the clinician simply adds up the component scores.
+</IndentedAside>
+
+<IndentedAside title="Cutoffs">
+It is common practise to apply cutoffs to composite scores and assign discrete disease states to the resulting categories.
+
+The cutoffs below are those for the most common composite scores used in RA.
+
+| Disease activity | DAS28ESR | DAS28CRP | SDAI   | CDAI   |
+|:-----------------|----------|----------|--------|--------|
+| Remission        | < 2.6    | < 2.4    | ≤ 3.3  | ≤ 2.8  |
+| Low              | ≤ 3.2    | ≤ 2.9    | ≤ 11.0 | ≤ 10.0 |
+| Moderate         | ≤ 5.1    | ≤ 4.6    | ≤ 26.0 | ≤ 22.0 |
+| High             | > 5.1    | > 4.6    | > 26.0 | > 22.0 |
+</IndentedAside>
+
 ## D
 
 ### Disease-modifying antirheumatic drug
@@ -53,7 +109,7 @@ NSAIDs treat the inflammation present in, e.g., RA, but not its underlying cause
 ## P
 
 ### Prevention
-The WHO defines prevention as "approaches and activities aimed at reducing the likelihood that a disease or disorder will affect an individual, interrupting or slowing the progress of the disorder or reducing disability".
+The WHO defines prevention as "approaches and activities aimed at reducing the likelihood that a disease or disorder will affect an individual, interrupting or slowing the progress of the disorder or reducing disability". <Citation citeKey="who_prevention_2025" citations={citations} />
 
 <IndentedAside title="Primordial prevention">
 Primordial prevention targets exposures of population risk factors before they can put anyone at risk.
@@ -85,13 +141,16 @@ Rheumatoid arthritis is commonly abbreviated RA.
 <IndentedAside title="Difficult-to-treat RA">
 &rarr; D2T-RA
 
-D2T-RA describes RA which has been unsuccessfully treated with at least two different mechanism of action b/tsDMARDs and shows signs of active or progressive disease.
+D2T-RA describes RA which has been unsuccessfully treated with at least two different mechanism of action b/tsDMARDs and shows signs of active or progressive disease (for more details, see the EULAR definition of D2T-RA <Citation citeKey="nagy_eular_2021" citations={citations} />).
 Progressive disease is not limited to inflammatory joint pathology but captures a wider picture contributing to treatment failure, such as comorbidity, obesity, and fibromyalgia.
 
 More specifically, the EULAR defintion comprises three elements: 
 - history of failed treatments
 - features of active disease
 - the perception of challenging RA by the clinician and / or patient
+
+### Why at least *two* different mechanisms?
+Two different mechanisms of action failing to control the RA disease reflects a drug-resistant disease state. <Citation citeKey="tan_difficult_2022" citations={citations} />
 </IndentedAside>
 
 ## S
@@ -107,3 +166,5 @@ Steroids dampen the immune response in autoimmune diseases such as RA but cannot
 
 T2T aims to reduce disease activity to a specific target rather than treating symptoms as they arise.
 The treatment target is typically DAS28 remission, or low disease activity (&rarr; LDA) if remission is not a realistic goal.
+
+<References citations={citations} />
