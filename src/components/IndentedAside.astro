@@ -1,0 +1,10 @@
+---
+import Aside from "./Aside.astro";
+const { title } = Astro.props;
+---
+
+<div style="margin-left:1.5rem">
+  <Aside title={title}>
+    <slot />
+  </Aside>
+</div>

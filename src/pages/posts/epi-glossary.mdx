@@ -1,0 +1,93 @@
+---
+layout: ../../layouts/MarkdownPostLayout.astro
+title: A small rheumatology glossary
+author: Simon Steiger
+pubDate: 2025-06-19
+tags: ["rheumatology", "epidemiology"]
+draft: false
+description: > 
+    This is a glossary of rheumatology and epidemiology terms and definitions that I often forget. This list is always growing and never finished, with the small caveat that I'll certainly forget about it eventually. 🌚🌝
+---
+
+import IndentedAside from '@components/IndentedAside.astro';
+import Citation from '@components/Citation.astro';
+import References from '@components/References.astro';
+import { loadCitations } from '@utils/citations';
+
+export const citations = await loadCitations('src/data/references_glossary.bib');
+
+## D
+
+### Disease-modifying antirheumatic drug
+&rarr; DMARD
+
+<IndentedAside title="Conventional synthetic DMARD">
+&rarr; csDMARD
+
+csDMARDs are the "traditional" drugs used to treat RA, such as methotrexate (&rarr; MTX), sulfasalazine, leflunomide, hydroxychloroquine, and gold salts.
+</IndentedAside>
+
+<IndentedAside title="Biologic DMARD">
+&rarr; bDMARD
+
+bDMARDs are engineered proteins targeting specific inflammatory pathways, blocking cytokines, immune cells, or other receptors that play a key role in autoimmunity.
+Examples are tumor necrosis factor-alpha inhibitors (&rarr; TNFi) and interleukin (&rarr; IL) inhibitors.
+</IndentedAside>
+
+<IndentedAside title="Targeted synthetic DMARD">
+&rarr; tsDMARD
+
+tsDMARDs are are drugs developed to target specific molecular structures, such as Janus kinase inhibitors (&rarr; JAKi), e.g., baricitinib and tofacitinib.
+</IndentedAside>
+
+## P
+
+### Prevention
+The WHO defines prevention as "approaches and activities aimed at reducing the likelihood that a disease or disorder will affect an individual, interrupting or slowing the progress of the disorder or reducing disability".
+
+<IndentedAside title="Primordial prevention">
+Primordial prevention targets exposures of population risk factors before they can put anyone at risk.
+</IndentedAside>
+
+<IndentedAside title="Primary prevention">
+Primary prevention targets the first apparent clinical manifestation of the preventable outcome (e.g., a vaccination for a disease).
+</IndentedAside>
+
+<IndentedAside title="Secondary prevention">
+Secondary prevention aims at detecting a preventable outcome during a period in which it has not yet inflicted cricial and permanent damage.
+</IndentedAside>
+
+<IndentedAside title="Tertiary prevention">
+Tertiary prevention aims at reducing the impact of a preventable outcome that already affects an individual negatively.
+</IndentedAside>
+
+<IndentedAside title="Quaternary prevention">
+Quaternary prevention aims to reduce overmedicalisation by identifying those individuals not or no longer in need of treatment.
+</IndentedAside>
+
+## R
+
+### Rheumatoid arthritis
+&rarr; RA
+
+Rheumatoid arthritis is a chronic autoimmune disease that affects the joints. 
+Rheumatoid arthritis is commonly abbreviated RA.
+<IndentedAside title="Difficult-to-treat RA">
+&rarr; D2T-RA
+
+D2T-RA describes RA which has been unsuccessfully treated with at least two different mechanism of action b/tsDMARDs and shows signs of active or progressive disease.
+Progressive disease is not limited to inflammatory joint pathology but captures a wider picture contributing to treatment failure, such as comorbidity, obesity, and fibromyalgia.
+
+More specifically, the EULAR defintion comprises three elements: 
+- history of failed treatments
+- features of active disease
+- the perception of challenging RA by the clinician and / or patient
+</IndentedAside>
+
+## T
+
+### Treat to target strategy
+&rarr; T2T
+
+T2T aims to reduce disease activity to a specific target rather than treating symptoms as they arise.
+The treatment target is typically DAS28 remission, or low disease activity (&rarr; LDA) if remission is not a realistic goal.

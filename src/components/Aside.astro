@@ -6,7 +6,7 @@ const { title } = Astro.props;
   "my-4 p-4 bordered",
   { "flex items-center": !title }
 ]}>
-  {title && <h3 set:html={title} class="pb-2" />}
+  {title && <h3 set:html={title} />}
   <slot />
 </div>
 
