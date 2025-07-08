@@ -1,22 +1,24 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import BlogPost from "../components/BlogPost.astro";
-const allPosts = await Astro.glob("./posts/*.{md,mdx}");
-const isAllDraft = allPosts.every((post) => post.frontmatter.draft === true);
+import { getCollection } from "astro:content";
+const posts = (await getCollection("posts")).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
 const pageTitle = "Notes";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-  <p>The posts are more text-heavy and the notebooks are more focused on code.</p>
+  <p>
+    The posts are more text-heavy and the notebooks are more focused on code.
+  </p>
   <h2>Posts</h2>
   {
-    isAllDraft ? (
-      <p>Nothing here yet.</p>
-    ) : (
+    (
       <ul>
-        {allPosts.map((post) =>
-          post.frontmatter.draft ? null : (
-            <BlogPost url={post.url} title={post.frontmatter.title} />
+        {posts.map((post) =>
+          post.data.draft ? null : (
+            <BlogPost url={`/posts/${post.id}`} title={post.data.title} />
           ),
         )}
       </ul>
@@ -28,45 +30,53 @@ const pageTitle = "Notes";
     <li>
       <a
         href="https://learnbayes.se/julia/statistical_rethinking/02_globetossing"
-        target="_blank">Lecture 2: The Garden of Forking Paths</a>
+        target="_blank">Lecture 2: The Garden of Forking Paths</a
+      >
     </li>
     <li>
       <a
         href="https://learnbayes.se/julia/statistical_rethinking/03_geocentric.html"
-        target="_blank">Lecture 3: Geocentric models</a>
+        target="_blank">Lecture 3: Geocentric models</a
+      >
     </li>
     <li>
       <a
         href="https://learnbayes.se/julia/statistical_rethinking/04_categories.html"
-        target="_blank">Lecture 4: Categories and Curves</a>
+        target="_blank">Lecture 4: Categories and Curves</a
+      >
     </li>
     <li>
       <a
         href="https://learnbayes.se/julia/statistical_rethinking/05_confounds.html"
-        target="_blank">Lecture 5: Elemental Confounds</a>
+        target="_blank">Lecture 5: Elemental Confounds</a
+      >
     </li>
     <li>
       <a
         href="https://learnbayes.se/julia/statistical_rethinking/06_docalculus.html"
-        target="_blank">Lecture 6: Good and Bad Controls</a>
+        target="_blank">Lecture 6: Good and Bad Controls</a
+      >
     </li>
   </ul>
-  <p>Some <a href="https://turinglang.org", target="_blank">Turing.jl</a> models:</p>
+  <p>
+    Some <a href="https://turinglang.org" , target="_blank">Turing.jl</a> models:
+  </p>
   <ul>
     <li>
       <a
         href="https://learnbayes.se/julia/linearregression.html"
-        target="_blank">Learn about Turing.jl with a linear regression</a>
+        target="_blank">Learn about Turing.jl with a linear regression</a
+      >
     </li>
     <li>
-      <a
-        href="https://learnbayes.se/julia/metaanalysis.html"
-        target="_blank">Basic tutorial on Meta Analysis</a>
+      <a href="https://learnbayes.se/julia/metaanalysis.html" target="_blank"
+        >Basic tutorial on Meta Analysis</a
+      >
     </li>
     <li>
-      <a
-        href="https://learnbayes.se/julia/hmm.html"
-        target="_blank">Intro to Hidden Markov Models</a>
+      <a href="https://learnbayes.se/julia/hmm.html" target="_blank"
+        >Intro to Hidden Markov Models</a
+      >
     </li>
   </ul>
 </BaseLayout>
