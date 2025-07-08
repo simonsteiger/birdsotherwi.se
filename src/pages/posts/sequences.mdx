@@ -20,7 +20,7 @@ end
 function collapse(s::Sequence)
     i = 0
     cs = Sequence(s.id, Int64[], Float64[])
-    while i != length(s.relevance)
+    while i < length(s)
         push!(cs.relevance, s.relevance[i + 1])
         segment_duration, i = accumulate_segment(s, i + 1)
         push!(cs.duration, segment_duration)
@@ -36,7 +36,7 @@ Base.length(s::Sequence) = length(s.relevance)
 ```julia
 function accumulate_segment(s::Sequence, i)
     accumulator = s.duration[i]
-    while i != length(s) && s.relevance[i] == s.relevance[i + 1]
+    while i < length(s) && s.relevance[i] == s.relevance[i + 1]
         accumulator += s.duration[i + 1]
         i += 1
     end
