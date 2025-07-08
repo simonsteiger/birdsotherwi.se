@@ -20,12 +20,15 @@ const sortedCitations = Object.values(citations).sort((a: Citation, b: Citation)
   <ol class="reference-list">
     {sortedCitations.map((citation: Citation) => (
       <li class="reference-item" id={`ref-${citation.authors[0]?.split(' ').pop()}-${citation.year}`}>
-        {citation.authors.join('; ')} ({citation.year}). 
         {citation.title}.
-        <em>{citation.journal}</em>.
         {citation.doi && (
           <a href={`https://doi.org/${citation.doi}`} class="doi-link">
-            https://doi.org/${citation.doi}
+            [link]
+          </a>
+        )}
+        {!citation.doi && citation.url && (
+          <a href={citation.url} class="doi-link">
+            [link]
           </a>
         )}
       </li>
@@ -65,10 +68,9 @@ const sortedCitations = Object.values(citations).sort((a: Citation, b: Citation)
   }
   
   .doi-link {
-    display: block;
+    display: inline-block;
     margin-top: 0.25rem;
     color: #666;
-    font-size: 0.9em;
   }
 
   :global(.dark) .doi-link {

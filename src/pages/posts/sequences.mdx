@@ -1,0 +1,57 @@
+---
+title: Something about paradigms of programming languages
+author: Simon Steiger
+tags: ["julia", "r", "dataframes"]
+pubDate: 2025-07-10
+draft: true
+description: Nothing here yet
+---
+
+```julia
+struct Sequence
+    id::Int64
+    relevance::Vector{Int64}
+    duration::Vector{Float64}
+    function Sequence(id, relevance, duration)
+        @assert length(relevance) == length(duration)
+        return new(id, relevance, duration)
+    end
+end
+```
+
+
+```julia
+function collapse(s::Sequence)
+    i = 0
+    cs = Sequence(s.id, Int64[], Float64[])
+    while i < length(s)
+        push!(cs.relevance, s.relevance[i + 1])
+        segment_duration, i = accumulate_segment(s, i + 1)
+        push!(cs.duration, segment_duration)
+    end
+    return cs
+end
+```
+
+```julia
+Base.length(s::Sequence) = length(s.relevance)
+```
+
+```julia
+function accumulate_segment(s::Sequence, i)
+    accumulator = s.duration[i]
+    while i < length(s) && s.relevance[i] == s.relevance[i + 1]
+        accumulator += s.duration[i + 1]
+        i += 1
+    end
+    return accumulator, i
+end
+```
+
+```julia
+id = 1
+relevance = [1, 1, 2, 2, 2, 1]
+duration = fill(0.1, length(relevance))
+s = Sequence(id, relevance, duration)
+x = collapse(s)
+```
