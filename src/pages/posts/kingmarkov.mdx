@@ -1,0 +1,190 @@
+---
+layout: ../../layouts/MarkdownPostLayout.astro
+title: Ohana means family
+author: Simon Steiger
+pubDate: 2025-07-10
+tags: ["julia", "makie"]
+draft: false
+description: >
+    Makie recently released v0.24, switching away from Observables and introducing a new way to animate plots.
+    I explored this new way to create animations through Richard McElreath's King Markov story.
+---
+
+[Makie](https://docs.makie.org/stable/) recently released [version 0.24](https://makie.org/website/blogposts/v0.24.0/) in which the development team moved away from Observables.
+Instead, Makie now uses a `ComputeGraph` but who am I to tell you this – the blog post certainly does a much better job at explaining that.
+
+I've been wanting to try to recreate Richard McElreath's pretty animation of [King Markov traveling his island kingdom](https://youtu.be/rZk2FqX2XnY?si=llwcBzTIPXiowEg0&t=1007) for a long time, and what would be a better way to learn about Makie's new features than traveling with King Markov!
+
+## The Polynesian King
+
+In his analogy, Richard McElreath introduces a Polynesian King called Markov who has promised his citizens to visit their islands for a number of days proportional to the island's population.
+Importantly, this King wants to decide whether to change islands on a day-to-day basis, so scheduling visits to fulfil his promise isn't an option.
+
+Instead, one of the King's smart advisors has suggested the following rules and convinced the King that if he abides by then, he will fulfil his promise (if he rules for several years!):
+
+1. Flip a coin to choose which of the two nearest islands we'll consider for travel. The island winning the coinflip is the "proposal" island.
+2. Find the population `p_proposal` of the proposal island.
+3. Find the population `p_current` of the current island.
+4. Move to the proposal island with probability `p_proposal / p_current`.
+
+Let's see if we can code up those rules! 
+I am sure that there are many great solutions, and here's one that I came up with.
+
+First, I created a `struct` to track details about the King's `Journey`.
+
+```julia
+struct Journey
+	nislands::Int64
+	population::Vector{Int64}
+	history::Vector{Int64}
+	function Journey(nislands, population, history)
+		@assert length(population) == nislands
+        @assert !isempty(history)
+		return new(nislands, population, history)
+	end
+end
+```
+
+A `Journey` defines how many islands the King needs to visit and also records their populations.
+We'll also want to store the `history` of the King's travels to check if his advisor was right that these rules allow him to keep his promise.
+
+Next, we need to implement a way to `propose` the next travel destination:
+
+```julia
+function propose(j::Journey)
+	proposal = last(j.history) + rand([-1, 1])
+	1 <= proposal <= j.nislands && return proposal
+	proposal < 1 && return j.nislands
+	return 1
+end
+```
+
+The islands are arranged in a circle in this example, which means that we can sample from `rand([-1, 1])` to choose the proposal island.
+We need to be careful about the edges of the space though – the outermost islands have to be connected!
+
+Equipped with a proposal island, we need to decide if the King should travel to this island or stay where he is currently lodged.
+To do so, we find the respective population data, calculate the probability of accepting the proposal, and then ... well ... we're a King, so of course we have all sorts of biased coins around!
+
+```julia
+using Distributions
+
+function accept(j::Journey, proposal)
+	current_pop = j.population[last(j.history)]
+	next_pop = j.population[proposal]
+	p_accept = clamp(next_pop / current_pop, 0, 1)
+	return rand(Bernoulli(p_accept))
+end
+```
+
+Finally, we update the King's travel logs depending on what we decided to do.
+
+```julia
+function step!(j::Journey)
+	proposal = propose(j)
+	if accept(j, proposal)
+		push!(j.history, proposal)
+	else
+		push!(j.history, last(j.history))
+	end
+	return nothing
+end
+```
+
+Ok, we're set!
+But before we start, let's set up a `Journey` already.
+Then we'll let the King travel for a few days and see what happens.
+
+```julia
+start_pos = 1
+j = Journey(10, population, [start_pos])
+```
+
+We'll start by plotting the archipelago so we can check how the King moves around.
+
+```julia
+using GLMakie
+
+fig = Figure(size=(800,400))
+	
+pax = PolarAxis(fig[1, 1])
+hidedecorations!(pax)
+hidespines!(pax)
+	
+xs = range(0, 2pi-2pi/10, length=10)
+scatter!(xs, fill(7.5, 10), markersize=range(20, 80, length=10), strokewidth=2, strokecolor=colors[6], color=(colors[2], 0.2))
+```
+
+Now we've got the islands ready, but we'll also want to indicate where the King is currently located and where he intends to go next.
+
+```julia
+alpha = 0.3	
+ar = arrows2d!([xs[start_pos]], [7.5], [0], [0], color=first(colors))
+sc = scatter!(xs[start_pos], 7.5, markersize=20, strokewidth=0, strokecolor=first(colors), color=(first(colors), 0.3))
+```
+
+So far so good.
+We should not join the King in "living in the moment" so much as to forget to check if he has fulfilled his promise!
+
+```julia
+function getcolors(i, colors, alpha)
+	cols = fill((first(colors), 0.2), 10)
+	cols[i] = (first(colors), alpha)
+	return cols
+end
+
+ax = Axis(fig[1, 2], limits=((0, 11), (0, 60)), xticks=1:10)
+hidespines!(ax, :l, :t, :r)
+hidexdecorations!(ax, ticks=false, ticklabels=false)
+hideydecorations!(ax)
+	
+counts = [sum(i .== j.history) for i in 1:10]
+bp = barplot!(1:10, counts, color=getcolors(colors, last(j.history), alpha), strokecolor=first(colors), strokewidth=2)
+```
+
+And now for the fun part, let's have the King travel for 100 days!
+
+```julia
+timestamps = 1:100
+framerate = 5
+	
+record(fig, "test.mp4", timestamps; framerate=framerate) do _
+	step!(j::Journey)
+
+	ultx = xs[j.history[end]]
+	penultx = xs[j.history[end-1]]
+	
+	Makie.update!(ar, arg1=[penultx], arg3=[ultx - penultx])
+	
+	if j.history[end] == j.history[end-1]
+		alpha += 0.1
+		Makie.update!(sc, arg1=ultx, color=(first(colors), alpha))
+	else
+		alpha = 0.3
+		Makie.update!(sc, arg1=ultx, color=(first(colors), alpha))
+	end
+	counts = [sum(i .== j.history) for i in 1:10]
+	barcolors = getcolors(colors, last(j.history), alpha)
+	Makie.update!(bp, arg2=counts, color=barcolors)
+end
+```
+
+This is what the first 100 days would look like:
+
+<video width="100%" controls>
+  <source src="/videos/kingmarkov_slow.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+  </source>
+</video>
+
+<br></br>
+Hmmm, not much to see yet!
+But what would it look like if our King enjoyed a *very* long and healthy life?
+
+<video width="100%" controls>
+  <source src="/videos/kingmarkov_fast.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+  </source>
+</video>
+
+<br></br>
+His advisor was right!
