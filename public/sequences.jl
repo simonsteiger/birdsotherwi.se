@@ -33,12 +33,6 @@ end
 # ╔═╡ b4dd1cea-1214-426d-9eab-0612c1a97ac9
 Base.length(s::Sequence) = length(s.duration)
 
-# ╔═╡ e17bf9f4-a3a1-439b-b777-0663b1347aa9
-let
-	x = 1:3
-	view(x, 1) == view(x, 2)
-end
-
 # ╔═╡ 24e262e5-e413-46ef-93f2-53d7a525de00
 function accumulate_segment(s::Sequence, i)
     accumulator = s.duration[i]
@@ -132,6 +126,47 @@ r_result_df <- r_solution(df)
 bnch <- bench::mark(
   r_solution(df)
 )
+"""
+
+# ╔═╡ e3d61ddd-6fa3-4bd6-8ea5-0122b7136bdc
+R"""
+# Constructor function
+Sequence <- function(id, relevance, duration) {
+  # Validation (equivalent to @assert)
+  if (length(relevance) != length(duration)) {
+    stop("Length of relevance and duration must be equal")
+  }
+  
+  # Create the object
+  obj <- list(
+    id = as.integer(id),
+    relevance = as.integer(relevance),
+    duration = as.numeric(duration)
+  )
+  
+  # Set the class
+  class(obj) <- "Sequence"
+  return(obj)
+}
+
+length.Sequence <- function(s) {
+  length(s$relevance)
+}
+
+# Usage
+seq_list <- list()
+
+for (i in seq_len(max(df$id))) {
+  sdf <- filter(df, id == i)
+  seq_list[[i]] <- Sequence(
+    id = unique(sdf$id),
+	relevance = sdf$relevance,
+    duration = sdf$duration
+  )
+}
+seq_list
+
+length(seq_list[[1]])
 """
 
 # ╔═╡ c0c9d398-eecb-449d-a268-0f197943fce9
@@ -865,7 +900,6 @@ version = "1.59.0+0"
 # ╠═b4dd1cea-1214-426d-9eab-0612c1a97ac9
 # ╠═d564552e-3969-4561-884e-14915d9f8487
 # ╠═5560b5e5-6bfc-436b-93e7-4b6b6350a619
-# ╠═e17bf9f4-a3a1-439b-b777-0663b1347aa9
 # ╠═24e262e5-e413-46ef-93f2-53d7a525de00
 # ╠═5d9d02e2-a404-4519-81ef-080a0d2ed248
 # ╠═676a4d5e-62dc-4976-b2ee-41a7b7a34ecf
@@ -880,6 +914,7 @@ version = "1.59.0+0"
 # ╠═0324977e-cbf8-4fa1-92e6-7c4ecd1292fd
 # ╠═1ab42b74-d04a-4c46-b654-b06d0f5db298
 # ╠═6e4b97ea-f7c3-411e-946f-92b30ca48526
+# ╠═e3d61ddd-6fa3-4bd6-8ea5-0122b7136bdc
 # ╠═c0c9d398-eecb-449d-a268-0f197943fce9
 # ╠═b8bf4522-804c-471c-ba5a-5443f089e57f
 # ╠═0a07e943-eb85-4cfb-86f9-c8a5a2fd5b3c
