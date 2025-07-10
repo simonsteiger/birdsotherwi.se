@@ -59,7 +59,7 @@ function propose(j::Journey)
 end
 ```
 
-The islands are arranged in a circle in this example, which means that we can sample from `rand([-1, 1])` to choose the proposal island.
+The islands are arranged in a circle in this example, which means that we can sample from `rand([-1, 1])` and add this to the King's last position to choose the proposal island.
 We need to be careful about the edges of the space though – the outermost islands have to be connected!
 
 Equipped with a proposal island, we need to decide if the King should travel to this island or stay where he is currently lodged.
@@ -111,7 +111,8 @@ hidedecorations!(pax)
 hidespines!(pax)
 	
 xs = range(0, 2pi-2pi/10, length=10)
-scatter!(xs, fill(7.5, 10), markersize=range(20, 80, length=10), strokewidth=2, strokecolor=colors[6], color=(colors[2], 0.2))
+scatter!(xs, fill(7.5, 10), markersize=range(20, 80, length=10),
+	strokewidth=2, strokecolor=colors[6], color=(colors[2], 0.2))
 ```
 
 Now we've got the islands ready, but we'll also want to indicate where the King is currently located and where he intends to go next.
@@ -119,7 +120,8 @@ Now we've got the islands ready, but we'll also want to indicate where the King 
 ```julia
 alpha = 0.3	
 ar = arrows2d!([xs[start_pos]], [7.5], [0], [0], color=first(colors))
-sc = scatter!(xs[start_pos], 7.5, markersize=20, strokewidth=0, strokecolor=first(colors), color=(first(colors), 0.3))
+sc = scatter!(xs[start_pos], 7.5, markersize=20, strokewidth=0,
+	strokecolor=first(colors), color=(first(colors), 0.3))
 ```
 
 So far so good.
@@ -138,7 +140,8 @@ hidexdecorations!(ax, ticks=false, ticklabels=false)
 hideydecorations!(ax)
 	
 counts = [sum(i .== j.history) for i in 1:10]
-bp = barplot!(1:10, counts, color=getcolors(colors, last(j.history), alpha), strokecolor=first(colors), strokewidth=2)
+bp = barplot!(1:10, counts, color=getcolors(colors, last(j.history), alpha),
+	strokecolor=first(colors), strokewidth=2)
 ```
 
 And now for the fun part, let's have the King travel for 100 days!
@@ -147,7 +150,7 @@ And now for the fun part, let's have the King travel for 100 days!
 timestamps = 1:100
 framerate = 5
 	
-record(fig, "test.mp4", timestamps; framerate=framerate) do _
+record(fig, "kingmarkov.mp4", timestamps; framerate=framerate) do _
 	step!(j::Journey)
 
 	ultx = xs[j.history[end]]
