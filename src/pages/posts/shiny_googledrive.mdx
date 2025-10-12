@@ -1,0 +1,95 @@
+---
+layout: ../../layouts/MarkdownPostLayout.astro
+title: Persistent data storage in Shiny apps
+author: Simon Steiger
+pubDate: 2025-10-12
+tags: ["r", "shiny"]
+draft: false
+description: >
+    Shiny apps don't store user-provided data beyond the duration of a single session.
+    A quick solution for small projects is to use cloud services like example Google Drive.
+---
+
+A while ago, a friend from univeristy approached me with an idea to add a Shiny app to their meta analysis about perfectionism in young people.
+
+The purpose of that Shiny app was twofold: first, to show the results of the meta analysis and second, to allow perfectionism researchers to contribute their research findings to the data base.
+What a cool idea – a living meta analysis!
+
+The only problem we needed to solve was to figure out how to save user input beyond the duration of a single app session.
+
+There are many solutions to this problem, ranging from cloud services like Dropbox or Google Drive to databases like MySQL.
+For our project, Google Drive seemed to be sufficient. 
+
+This post will only discuss how to work with Google Drive; for information about other the options, see [this article](https://shiny.posit.co/r/articles/build/persistent-data-storage/).
+
+## Authorizing a Google account
+
+Uploading data from your shiny app to Google Drive requires your account to be authorized. 
+Since Google requires the user to authenticate in each session, we need to find a way to automatically authenticate the user of the shiny app. 
+
+First, however, we should make sure that we have a secure setup for handling this authentication process.
+
+### Safely storing account information
+
+You probably wouldn't want everyone on the internet to be able to see your (or your project's) email address, the URL to the Google sheet that you're saving data to, or -- even worse -- the login key to your account! 
+(Here, I am assuming that you are uploading your data to a git hosting service like GitHub or GitLab)
+
+One way to avoid this is to work with so-called `.env` file.
+
+Create a file called `.env` and store your email and the URL to your Google sheet:
+
+```
+EMAIL="email@gmail.com"
+URL="https://docs.google.com/spreadsheets/1234"
+```
+
+Since I assume that you are tracking your files via GitHub, it's essential that you add the `.env` file to `.gitignore` -- it wouldn't be all that secret otherwise!
+To do this, simply create a file called `.gitignore` and write `.env` on a new line.
+
+### Authenticating with Google Drive
+
+My solution is based on [this](https://stackoverflow.com/questions/61375368/is-there-a-way-to-auto-authenticate-access-to-googlesheets-upon-r-shiny-app-load) post.
+
+We'll need two packages here, namely `googlesheets4` and `googledrive`.
+
+```r
+library(googlesheets4)
+library(googledrive)
+
+# main.R
+# Authenticate Google sheets
+drive_auth(cache = ".secrets", email = Sys.getenv("EMAIL"))
+gs4_auth(token = drive_token(), email = Sys.getenv("EMAIL"))
+
+# .Rprofile
+# Point to .secrets file
+options(
+  # ...
+  gargle_oauth_cache = ".secrets"
+)
+```
+
+You will have to run the lines in `main.R` locally to create an authentication key, and let R know where this key is stored in `.Rprofile`.
+
+The first time you run these lines, you should be prompted to log into the Google account associated with the `EMAIL` variable in the `.env` file.
+After giving `tidyverse` the necessary rights to access your Google account, you should see a message telling you to go back to your R editor.
+Now, there should also be a `.secrets` folder in your project.
+This folder should contain a single file; this is your authentication key.
+
+Make sure to add `.secrets` to `.gitignore`.
+This folder should definitely not be shared with the rest of the internet!
+
+### Reading data from Google Drive
+
+Finally, to read data from Google Drive, you can use the `read_sheet()` function from the `googlesheets4` package:
+
+```r
+data <- read_sheet(Sys.getenv("URL"))
+```
+
+Have a look at the documentation of `read_sheet()` and the arguments `col_types` and `na` if the default setting doesn't correctly format column types or `NA` values.
+
+## Examples
+
+I have written a [small example app](https://github.com/simonsteiger/pica) to showcase this.
+If you are curious, feel free to have a look at the [living meta analysis](www.perfectionismobservatory.com/) about perfectionism, too!
