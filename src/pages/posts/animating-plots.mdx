@@ -6,7 +6,7 @@ pubDate: 2025-01-28
 tags: ["julia", "makie"]
 draft: false
 description: >
-    I simulated how age and happiness could be confounded by marital status, and
+    I simulated how an association between age and happiness could be confounded by marital status, and
     visualized the result with an animated plot using Makie and Observables.
 ---
 
@@ -39,7 +39,7 @@ We'd be working with a straightforward linear regression:
 This seems reasonable, right?
 What could go wrong?
 
-Once again simplifying a lot, let's assume that as an adult person ages, they have a fixed probability to marry for each year that passes, and that this probability in influenced by how happy that person is.
+Once again simplifying a lot, let's assume that as an adult person ages, they have a fixed probability to marry for each year that passes, and that this probability is influenced by how happy that person is.
 
 The probability for a person having married by time $t$ would then be:
 
@@ -50,7 +50,7 @@ p(M_t) = 1 - (1 - f(H))^t
 We'd expect happier individuals to marry at a younger age than unhappy individuals, which creates a spurious negative association between age and happiness.
 Oops!
 
-Among married people, those who are particularly young are more likely to be very happy, since that marrying so early is unlikely otherwise. 
+Among married people, those who are particularly young are more likely to be very happy, since marrying so early is unlikely otherwise. 
 Similarly, among unmarried people, young people are also more likely to be happy -- after all, it takes some time to get married even if you're a happy person.
 
 Now, if we model happiness as a function of age _given the marital status_, our model would infer that young people are happier than older people.
