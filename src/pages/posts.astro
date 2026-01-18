@@ -5,14 +5,15 @@ import { getCollection } from "astro:content";
 const posts = (await getCollection("posts")).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
-const pageTitle = "Notes";
+const pageTitle = "Posts";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
   <p>
     The posts are more text-heavy and the notebooks are more focused on code.
   </p>
-  <h2>Posts</h2>
+  <h2>Writing</h2>
+  <p>A mix of Julia, R and rheumatology.</p>
   {
     (
       <ul>

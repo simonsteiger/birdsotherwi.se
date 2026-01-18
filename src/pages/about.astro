@@ -1,12 +1,29 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { Code } from "astro:components";
-const pageTitle = "About";
+const pageTitle = "Hello there!";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-    <div>
-        This is my personal website. It's pretty new, so there is not much here yet.
+    <div class="about-grid">
+        <div>
+            <p>I'm Simon and I like doing science.</p>
+            <p>
+                For most of my awake time during a normal week, I study
+                different ways to measure disease activity in rheumatoid
+                arthritis. That's pretty cool!
+            </p>
+            <p>
+                Whenever there's some free time and motivation left, I work on
+                projects involving <a
+                    href="https://www.nature.com/articles/s41559-024-02496-4"
+                    target="_blank">bird</a
+                > ecology or cognition – hence the website's name!
+            </p>
+        </div>
+        <div class="hover-image"></div>
+    </div>
+    <div style="display: inline-block">
         <h2>License</h2>
         <p>
             All content on this website is licensed under the <a
@@ -37,13 +54,13 @@ const pageTitle = "About";
             >, which in turn is derived from from the <a
                 href="https://themes.gohugo.io/themes/hugo-theme-hello-friend-ng/"
                 ><code>hello-friend-ng theme</code></a
-            > (<a
-                href="https://choosealicense.com/licenses/mit/"
-                target="_blank">MIT License</a
+            > (
+            <a href="https://choosealicense.com/licenses/mit/" target="_blank"
+                >MIT License</a
             >).
         </p>
     </div>
-    <div>
+    <div style="display: inline-block">
         <h2>Privacy Policy</h2>
         <p>
             No data is collected from visitors to this website. The website is
@@ -53,3 +70,33 @@ const pageTitle = "About";
         </p>
     </div>
 </BaseLayout>
+
+<style>
+    .about-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        margin-bottom: 0rem;
+    }
+
+    .hover-image {
+        width: 200px;
+        height: 200px;
+        background-image: url("/img/wow.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .hover-image:hover {
+        background-image: url("/img/omg.png");
+    }
+
+    @media (min-width: 768px) {
+        .about-grid {
+            grid-template-columns: 2fr 1fr;
+            align-items: start;
+        }
+    }
+</style>
