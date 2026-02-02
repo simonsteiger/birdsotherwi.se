@@ -39,7 +39,7 @@ struct Journey
 	history::Vector{Int64}
 	function Journey(nislands, population, history)
 		@assert length(population) == nislands
-        @assert !isempty(history)
+    	@assert !isempty(history)
 		return new(nislands, population, history)
 	end
 end
@@ -150,8 +150,8 @@ And now for the fun part, let's have the King travel for 100 days!
 timestamps = 1:100
 framerate = 5
 	
-record(fig, "kingmarkov.mp4", timestamps; framerate=framerate) do _
-	step!(j::Journey)
+record(fig, "kingmarkov.mp4", timestamps; framerate) do _
+	step!(j)
 
 	ultx = xs[j.history[end]]
 	penultx = xs[j.history[end-1]]

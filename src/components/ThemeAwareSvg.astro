@@ -1,0 +1,29 @@
+---
+interface Props {
+    lightSrc: string;
+    darkSrc: string;
+    alt?: string;
+    class?: string;
+}
+
+const { lightSrc, darkSrc, alt = "", class: className = "" } = Astro.props;
+---
+
+<img src={lightSrc} alt={alt} class={`theme-svg light-only ${className}`} />
+<img src={darkSrc} alt={alt} class={`theme-svg dark-only ${className}`} />
+
+<style>
+    .light-only {
+        display: block;
+    }
+    .dark-only {
+        display: none;
+    }
+
+    :global(.dark) .light-only {
+        display: none;
+    }
+    :global(.dark) .dark-only {
+        display: block;
+    }
+</style>
