@@ -6,7 +6,7 @@ interface Props {
   tags: string[];
 }
 
-const { url, title, pubDate, tags } = Astro.props;
+const { url, title, pubDate, tags = [] } = Astro.props;
 
 const formattedDate = pubDate.toLocaleDateString("en-GB", {
   day: "numeric",
