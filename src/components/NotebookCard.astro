@@ -1,0 +1,79 @@
+---
+interface Props {
+  url: string;
+  title: string;
+  description: string;
+  tags: string[];
+}
+
+const { url, title, description, tags = [] } = Astro.props;
+---
+
+<a href={url} class="card" target="_blank" rel="noopener noreferrer">
+  <span class="title">{title}</span>
+  <span class="description">{description}</span>
+  <div class="tags">
+    {tags.map((tag) => <span class="tag">{tag}</span>)}
+  </div>
+</a>
+
+<style>
+  .card {
+    display: block;
+    border: 1px solid #ddd;
+    padding: 18px 20px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.1s;
+  }
+
+  .card:hover {
+    border-color: #222;
+  }
+
+  :global(.dark) .card {
+    border-color: #444;
+  }
+
+  :global(.dark) .card:hover {
+    border-color: #aaa;
+  }
+
+  .title {
+    display: block;
+    font-size: 1rem;
+    font-weight: 400;
+    margin-bottom: 8px;
+  }
+
+  .description {
+    display: block;
+    font-size: 0.82rem;
+    color: #555;
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+
+  :global(.dark) .description {
+    color: #999;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    font-size: 0.72rem;
+    padding: 2px 7px;
+    background: #f0f0f0;
+    font-family: "JuliaMono-Light", monospace;
+    color: #444;
+  }
+
+  :global(.dark) .tag {
+    background: #35373b;
+    color: #ccc;
+  }
+</style>
