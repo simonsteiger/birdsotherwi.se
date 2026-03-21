@@ -1,0 +1,84 @@
+---
+interface Props {
+  url: string;
+  title: string;
+  pubDate: Date;
+  tags: string[];
+}
+
+const { url, title, pubDate, tags } = Astro.props;
+
+const formattedDate = pubDate.toLocaleDateString("en-GB", {
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+});
+---
+
+<a href={url} class="card">
+  <span class="title">{title}</span>
+  <time class="date" datetime={pubDate.toISOString()}>{formattedDate}</time>
+  <div class="tags">
+    {tags.map((tag) => <span class="tag">{tag}</span>)}
+  </div>
+</a>
+
+<style>
+  .card {
+    display: block;
+    border: 1px solid #ddd;
+    padding: 18px 20px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.1s;
+  }
+
+  .card:hover {
+    border-color: #222;
+  }
+
+  :global(.dark) .card {
+    border-color: #444;
+  }
+
+  :global(.dark) .card:hover {
+    border-color: #aaa;
+  }
+
+  .title {
+    display: block;
+    font-size: 1rem;
+    font-weight: 400;
+    margin-bottom: 8px;
+  }
+
+  .date {
+    display: block;
+    font-size: 0.78rem;
+    color: #888;
+    margin-bottom: 10px;
+  }
+
+  :global(.dark) .date {
+    color: #999;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    font-size: 0.72rem;
+    padding: 2px 7px;
+    background: #f0f0f0; /* filled pill — approved in design mockup; tags are not links */
+    font-family: "JuliaMono-Light", monospace;
+    color: #444;
+  }
+
+  :global(.dark) .tag {
+    background: #35373b;
+    color: #ccc;
+  }
+</style>
