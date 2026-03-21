@@ -4,7 +4,7 @@ import FooterElement from "./FooterElement.astro";
 
 <footer>
   <div class="footer-inner">
-    <FooterElement content="© 2025 <a href='https://github.com/simonsteiger'>Simon Steiger</a>" />
+    <FooterElement content={`© ${new Date().getFullYear()} <a href='https://github.com/simonsteiger'>Simon Steiger</a>`} />
     <FooterElement content="<a href='/about/#license'>License</a>" />
     <FooterElement content="<a href='/about/#privacy_policy'>Privacy Policy</a>" />
   </div>

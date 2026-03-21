@@ -1,10 +1,13 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import BlogPost from "../components/BlogPost.astro";
+import PostCard from "../components/PostCard.astro";
+import NotebookCard from "../components/NotebookCard.astro";
 import { getCollection } from "astro:content";
-const posts = (await getCollection("posts")).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+
+const posts = (await getCollection("posts"))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
 const pageTitle = "Posts";
 ---
 
@@ -14,70 +17,86 @@ const pageTitle = "Posts";
   </p>
   <h2>Writing</h2>
   <p>A mix of Julia, R and rheumatology.</p>
-  {
-    (
-      <ul>
-        {posts.map((post) =>
-          post.data.draft ? null : (
-            <BlogPost url={`/posts/${post.id}`} title={post.data.title} />
-          ),
-        )}
-      </ul>
-    )
-  }
+  <div class="post-grid">
+    {posts.map((post) => (
+      <PostCard
+        url={`/posts/${post.id}`}
+        title={post.data.title}
+        pubDate={post.data.pubDate}
+        tags={post.data.tags}
+      />
+    ))}
+  </div>
   <h2>Notebooks</h2>
   <p>Richard McElreath's statistical rethinking online lectures in Julia:</p>
-  <ul>
-    <li>
-      <a
-        href="https://learnbayes.se/julia/statistical_rethinking/02_globetossing"
-        target="_blank">Lecture 2: The Garden of Forking Paths</a
-      >
-    </li>
-    <li>
-      <a
-        href="https://learnbayes.se/julia/statistical_rethinking/03_geocentric.html"
-        target="_blank">Lecture 3: Geocentric models</a
-      >
-    </li>
-    <li>
-      <a
-        href="https://learnbayes.se/julia/statistical_rethinking/04_categories.html"
-        target="_blank">Lecture 4: Categories and Curves</a
-      >
-    </li>
-    <li>
-      <a
-        href="https://learnbayes.se/julia/statistical_rethinking/05_confounds.html"
-        target="_blank">Lecture 5: Elemental Confounds</a
-      >
-    </li>
-    <li>
-      <a
-        href="https://learnbayes.se/julia/statistical_rethinking/06_docalculus.html"
-        target="_blank">Lecture 6: Good and Bad Controls</a
-      >
-    </li>
-  </ul>
+  <div class="post-grid">
+    <NotebookCard
+      url="https://learnbayes.se/julia/statistical_rethinking/02_globetossing"
+      title="Lecture 2: The Garden of Forking Paths"
+      description="Learn to simulate data and think Bayesian"
+      tags={["julia", "turing"]}
+    />
+    <NotebookCard
+      url="https://learnbayes.se/julia/statistical_rethinking/03_geocentric.html"
+      title="Lecture 3: Geocentric Models"
+      description="Practice the Bayesian workflow"
+      tags={["julia", "turing"]}
+    />
+    <NotebookCard
+      url="https://learnbayes.se/julia/statistical_rethinking/04_categories.html"
+      title="Lecture 4: Categories and Curves"
+      description="Work with categorical predictors"
+      tags={["julia", "turing"]}
+    />
+    <NotebookCard
+      url="https://learnbayes.se/julia/statistical_rethinking/05_confounds.html"
+      title="Lecture 5: Elemental Confounds"
+      description="Learn about confounding"
+      tags={["julia", "turing"]}
+    />
+    <NotebookCard
+      url="https://learnbayes.se/julia/statistical_rethinking/06_docalculus.html"
+      title="Lecture 6: Good and Bad Controls"
+      description="Avoid biased estimates with do calculus"
+      tags={["julia", "turing"]}
+    />
+  </div>
   <p>
-    Some <a href="https://turinglang.org" , target="_blank">Turing.jl</a> models:
+    <br>
+    Some <a href="https://turinglang.org" target="_blank">Turing.jl</a> models:
   </p>
-  <ul>
-    <li>
-      <a
-        href="https://learnbayes.se/julia/linearregression.html"
-        target="_blank">Learn about Turing.jl with a linear regression</a
-      >
-    </li>
-    <li>
-      <a href="https://learnbayes.se/julia/metaanalysis.html" target="_blank"
-        >Basic tutorial on Meta Analysis</a
-      >
-    </li>
-    <li>
-      <a href="https://learnbayes.se/julia/hmm.html" target="_blank"
-        >Intro to Hidden Markov Models</a
-      >
-    </li>
-  </ul>
+  <div class="post-grid">
+    <NotebookCard
+      url="https://learnbayes.se/julia/linearregression.html"
+      title="Linear regression"
+      description="Get started using Turing.jl"
+      tags={["julia", "turing"]}
+    />
+    <NotebookCard
+      url="https://learnbayes.se/julia/metaanalysis.html"
+      title="Meta Analysis"
+      description="The Bayesian perspective on meta analysis"
+      tags={["julia", "turing"]}
+    />
+    <NotebookCard
+      url="https://learnbayes.se/julia/hmm.html"
+      title="Hidden Markov Models"
+      description="A showcase of Julia's extensibility"
+      tags={["julia", "turing"]}
+    />
+  </div>
+  <style>
+    .post-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 900px) {
+      .post-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </BaseLayout>
