@@ -1,10 +1,12 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import BlogPost from "../components/BlogPost.astro";
+import PostCard from "../components/PostCard.astro";
 import { getCollection } from "astro:content";
-const posts = (await getCollection("posts")).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+
+const posts = (await getCollection("posts"))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
 const pageTitle = "Posts";
 ---
 
@@ -14,17 +16,16 @@ const pageTitle = "Posts";
   </p>
   <h2>Writing</h2>
   <p>A mix of Julia, R and rheumatology.</p>
-  {
-    (
-      <ul>
-        {posts.map((post) =>
-          post.data.draft ? null : (
-            <BlogPost url={`/posts/${post.id}`} title={post.data.title} />
-          ),
-        )}
-      </ul>
-    )
-  }
+  <div class="post-grid">
+    {posts.map((post) => (
+      <PostCard
+        url={`/posts/${post.id}`}
+        title={post.data.title}
+        pubDate={post.data.pubDate}
+        tags={post.data.tags}
+      />
+    ))}
+  </div>
   <h2>Notebooks</h2>
   <p>Richard McElreath's statistical rethinking online lectures in Julia:</p>
   <ul>
@@ -80,4 +81,18 @@ const pageTitle = "Posts";
       >
     </li>
   </ul>
+  <style>
+    .post-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 900px) {
+      .post-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </BaseLayout>
