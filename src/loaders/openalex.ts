@@ -1,4 +1,5 @@
 import type { Loader } from "astro/loaders";
+import { nameCorrections } from "../data/nameCorrections";
 
 interface OpenAlexWork {
   id: string;
@@ -68,7 +69,7 @@ export function openAlexLoader({ orcidId }: { orcidId: string }): Loader {
           data: {
             title: work.title ?? "Untitled",
             authors: work.authorships.map((a) => ({
-              name: a.author.display_name ?? "Unknown",
+              name: nameCorrections[a.author.display_name ?? "Unknown"] ?? a.author.display_name ?? "Unknown",
               orcid: a.author.orcid?.replace("https://orcid.org/", "") ?? null,
             })),
             journal: work.primary_location?.source?.display_name,
