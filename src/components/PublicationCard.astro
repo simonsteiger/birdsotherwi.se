@@ -19,12 +19,8 @@ const { title, authors, journal, year, doi } = Astro.props;
 const doiUrl = doi ? `https://doi.org/${doi}` : undefined;
 const override = doi ? authorshipOverrides[doi] : undefined;
 const isUserAuthor = authors.some((a) => a.orcid === AUTHOR_ORCID);
-const userIsFirst = isUserAuthor && authors[0]?.orcid === AUTHOR_ORCID;
-const userIsLast =
-  isUserAuthor && authors[authors.length - 1]?.orcid === AUTHOR_ORCID;
 const showDagger =
-  (override?.sharedFirst && userIsFirst) ||
-  (override?.sharedLast && userIsLast);
+  isUserAuthor && !!(override?.sharedFirst || override?.sharedLast);
 ---
 
 <article class="card">
@@ -46,10 +42,7 @@ const showDagger =
         <>
           {i > 0 && ", "}
           {author.orcid === AUTHOR_ORCID ? (
-            <strong>
-              {author.name}
-              {showDagger && <sup>†</sup>}
-            </strong>
+            <strong>{author.name}{showDagger && <sup>†</sup>}</strong>
           ) : (
             author.name
           )}
