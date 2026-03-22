@@ -28,7 +28,7 @@ const { url, title, description, tags = [] } = Astro.props;
   }
 
   .card:hover {
-    border-color: #222;
+    background-color: #f7f7f7f7;
   }
 
   :global(.dark) .card {
@@ -36,7 +36,7 @@ const { url, title, description, tags = [] } = Astro.props;
   }
 
   :global(.dark) .card:hover {
-    border-color: #aaa;
+    background-color: #35373B;
   }
 
   .title {
@@ -70,6 +70,14 @@ const { url, title, description, tags = [] } = Astro.props;
     background: #f0f0f0;
     font-family: "JuliaMono-Light", monospace;
     color: #444;
+  }
+
+  .card:hover .tag {
+    background: #e0e0e0;
+  }
+
+  :global(.dark) .card:hover .tag {
+    background: #555;
   }
 
   :global(.dark) .tag {
