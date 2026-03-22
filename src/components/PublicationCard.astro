@@ -1,0 +1,109 @@
+---
+interface Author {
+  name: string;
+  orcid: string | null;
+}
+
+interface Props {
+  title: string;
+  authors: Author[];
+  userOrcid: string;
+  journal?: string;
+  year: number;
+  doi?: string;
+}
+
+const { title, authors, userOrcid, journal, year, doi } = Astro.props;
+
+const doiUrl = doi ? `https://doi.org/${doi}` : undefined;
+---
+
+<div class="card">
+  {
+    doiUrl ? (
+      <a href={doiUrl} class="title" target="_blank" rel="noopener noreferrer">
+        {title}
+      </a>
+    ) : (
+      <span class="title">{title}</span>
+    )
+  }
+  <p class="authors">
+    {
+      authors.map((author, i) => (
+        <>
+          {i > 0 && ", "}
+          {author.orcid === userOrcid ? (
+            <strong>{author.name}</strong>
+          ) : (
+            author.name
+          )}
+        </>
+      ))
+    }
+  </p>
+  {
+    (journal || year) && (
+      <p class="venue">
+        {journal && <span>{journal}</span>}
+        {journal && <span> · </span>}
+        <span>{year}</span>
+      </p>
+    )
+  }
+</div>
+
+<style>
+  .card {
+    display: block;
+    border: 1px solid #ddd;
+    padding: 18px 20px;
+    color: inherit;
+    transition: border-color 0.1s;
+  }
+
+  .card:hover {
+    border-color: #222;
+  }
+
+  :global(.dark) .card {
+    border-color: #444;
+  }
+
+  :global(.dark) .card:hover {
+    border-color: #aaa;
+  }
+
+  .title {
+    display: block;
+    font-size: 1rem;
+    font-weight: 400;
+    margin-bottom: 8px;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  a.title:hover {
+    text-decoration: underline;
+  }
+
+  .authors {
+    font-size: 0.85rem;
+    color: #555;
+    margin: 0 0 4px;
+  }
+
+  :global(.dark) .authors {
+    color: #aaa;
+  }
+
+  .venue {
+    font-size: 0.78rem;
+    color: #888;
+    margin: 0;
+  }
+
+  :global(.dark) .venue {
+    color: #999;
+  }
+</style>
