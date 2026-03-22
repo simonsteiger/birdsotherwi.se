@@ -1,0 +1,32 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PublicationCard from "../components/PublicationCard.astro";
+import { getCollection } from "astro:content";
+
+const publications = await getCollection("publications");
+const pageTitle = "Publications";
+---
+
+<BaseLayout pageTitle={pageTitle}>
+  <div class="pub-list">
+    {
+      publications.map((pub) => (
+        <PublicationCard
+          title={pub.data.title}
+          authors={pub.data.authors}
+          journal={pub.data.journal}
+          year={pub.data.year}
+          doi={pub.data.doi}
+        />
+      ))
+    }
+  </div>
+  <style>
+    .pub-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+  </style>
+</BaseLayout>
