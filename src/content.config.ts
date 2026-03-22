@@ -1,6 +1,7 @@
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
 import { openAlexLoader } from "./loaders/openalex";
+import { AUTHOR_ORCID } from "./config";
 
 const posts = defineCollection({
   loader: glob({ pattern: "*.{md,mdx}", base: "./src/pages/posts" }),
@@ -15,7 +16,7 @@ const posts = defineCollection({
 });
 
 const publications = defineCollection({
-  loader: openAlexLoader({ orcidId: "0009-0003-9745-354X" }),
+  loader: openAlexLoader({ orcidId: AUTHOR_ORCID }),
   schema: z.object({
     title: z.string(),
     authors: z.array(
