@@ -37,17 +37,17 @@ const override = doi ? authorshipOverrides[doi] : undefined;
     {
       authors.map((author, i) => {
         const isUser = author.orcid === AUTHOR_ORCID;
-        const showSup =
-          override &&
-          ((override.sharedFirst && (isUser || i === 0)) ||
-            (override.sharedLast && (isUser || i === authors.length - 1)));
+        const showFirst =
+          override?.sharedFirst && (isUser || i === 0);
+        const showLast =
+          override?.sharedLast && (isUser || i === authors.length - 1);
         return (
           <>
             {i > 0 && ", "}
             {isUser ? (
-              <strong>{author.name}{showSup && <sup>1</sup>}</strong>
+              <strong>{author.name}{showFirst && <sup>1</sup>}{showLast && <sup>2</sup>}</strong>
             ) : (
-              <>{author.name}{showSup && <sup>1</sup>}</>
+              <>{author.name}{showFirst && <sup>1</sup>}{showLast && <sup>2</sup>}</>
             )}
           </>
         );
