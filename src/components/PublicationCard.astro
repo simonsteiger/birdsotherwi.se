@@ -1,5 +1,6 @@
 ---
 import { AUTHOR_ORCID } from "../config";
+import { authorshipOverrides } from "../data/authorshipOverrides";
 
 interface Author {
   name: string;
@@ -16,31 +17,39 @@ interface Props {
 
 const { title, authors, journal, year, doi } = Astro.props;
 const doiUrl = doi ? `https://doi.org/${doi}` : undefined;
+const override = doi ? authorshipOverrides[doi] : undefined;
+const isUserAuthor = authors.some((a) => a.orcid === AUTHOR_ORCID);
+const userIsFirst = isUserAuthor && authors[0]?.orcid === AUTHOR_ORCID;
+const userIsLast =
+  isUserAuthor && authors[authors.length - 1]?.orcid === AUTHOR_ORCID;
+const showDagger =
+  (override?.sharedFirst && userIsFirst) ||
+  (override?.sharedLast && userIsLast);
 ---
 
 <article class="card">
   {
-    doiUrl ? (
+    doiUrl && (
       <a
         href={doiUrl}
-        class="title"
+        class="card-link"
         target="_blank"
         rel="noopener noreferrer"
         aria-label={`${title} (opens in new tab)`}
-      >
-        {title}
-      </a>
-    ) : (
-      <span class="title">{title}</span>
+      />
     )
   }
+  <span class="title">{title}</span>
   <p class="authors">
     {
       authors.map((author, i) => (
         <>
           {i > 0 && ", "}
           {author.orcid === AUTHOR_ORCID ? (
-            <strong>{author.name}</strong>
+            <strong>
+              {author.name}
+              {showDagger && <sup>†</sup>}
+            </strong>
           ) : (
             author.name
           )}
@@ -61,6 +70,7 @@ const doiUrl = doi ? `https://doi.org/${doi}` : undefined;
 
 <style>
   .card {
+    position: relative;
     border: 1px solid #ddd;
     padding: 18px 20px;
     color: inherit;
@@ -79,17 +89,22 @@ const doiUrl = doi ? `https://doi.org/${doi}` : undefined;
     border-color: #aaa;
   }
 
+  .card-link {
+    position: absolute;
+    inset: 0;
+  }
+
+  .card-link:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: -2px;
+  }
+
   .title {
     display: block;
     font-size: 1rem;
     font-weight: 400;
     margin-bottom: 8px;
-    text-decoration: none;
     color: inherit;
-  }
-
-  a.title:hover {
-    text-decoration: underline;
   }
 
   .authors {
