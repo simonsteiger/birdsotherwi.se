@@ -7,7 +7,7 @@ interface OpenAlexWork {
   doi: string | null;
   authorships: Array<{
     author: {
-      display_name: string;
+      display_name: string | null;
       orcid: string | null;
     };
   }>;
@@ -67,10 +67,10 @@ export function openAlexLoader({ orcidId }: { orcidId: string }): Loader {
           id,
           data: {
             title: work.title ?? "Untitled",
-            authors: work.authorships.map((a) => a.author.display_name),
-            authorOrcids: work.authorships.map(
-              (a) => a.author.orcid?.replace("https://orcid.org/", "") ?? null
-            ),
+            authors: work.authorships.map((a) => ({
+              name: a.author.display_name ?? "Unknown",
+              orcid: a.author.orcid?.replace("https://orcid.org/", "") ?? null,
+            })),
             journal: work.primary_location?.source?.display_name,
             year: work.publication_year,
             doi: work.doi?.replace("https://doi.org/", ""),

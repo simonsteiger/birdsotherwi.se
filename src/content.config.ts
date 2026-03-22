@@ -18,8 +18,12 @@ const publications = defineCollection({
   loader: openAlexLoader({ orcidId: "0009-0003-9745-354X" }),
   schema: z.object({
     title: z.string(),
-    authors: z.array(z.string()),
-    authorOrcids: z.array(z.string().nullable()),
+    authors: z.array(
+      z.object({
+        name: z.string(),
+        orcid: z.string().nullable(),
+      })
+    ),
     journal: z.string().optional(),
     year: z.number(),
     doi: z.string().optional(),
