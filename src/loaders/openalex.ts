@@ -3,7 +3,7 @@ import type { Loader } from "astro/loaders";
 interface OpenAlexWork {
   id: string;
   title: string | null;
-  publication_year: number;
+  publication_year: number | null;
   doi: string | null;
   authorships: Array<{
     author: {
@@ -72,7 +72,7 @@ export function openAlexLoader({ orcidId }: { orcidId: string }): Loader {
               orcid: a.author.orcid?.replace("https://orcid.org/", "") ?? null,
             })),
             journal: work.primary_location?.source?.display_name,
-            year: work.publication_year,
+            year: work.publication_year ?? new Date().getFullYear(),
             doi: work.doi?.replace("https://doi.org/", ""),
           },
         });

@@ -1,0 +1,1 @@
+export const AUTHOR_ORCID = "0009-0003-9745-354X";

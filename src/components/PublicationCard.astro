@@ -1,4 +1,6 @@
 ---
+import { AUTHOR_ORCID } from "../config";
+
 interface Author {
   name: string;
   orcid: string | null;
@@ -7,21 +9,25 @@ interface Author {
 interface Props {
   title: string;
   authors: Author[];
-  userOrcid: string;
   journal?: string;
   year: number;
   doi?: string;
 }
 
-const { title, authors, userOrcid, journal, year, doi } = Astro.props;
-
+const { title, authors, journal, year, doi } = Astro.props;
 const doiUrl = doi ? `https://doi.org/${doi}` : undefined;
 ---
 
-<div class="card">
+<article class="card">
   {
     doiUrl ? (
-      <a href={doiUrl} class="title" target="_blank" rel="noopener noreferrer">
+      <a
+        href={doiUrl}
+        class="title"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`${title} (opens in new tab)`}
+      >
         {title}
       </a>
     ) : (
@@ -33,7 +39,7 @@ const doiUrl = doi ? `https://doi.org/${doi}` : undefined;
       authors.map((author, i) => (
         <>
           {i > 0 && ", "}
-          {author.orcid === userOrcid ? (
+          {author.orcid === AUTHOR_ORCID ? (
             <strong>{author.name}</strong>
           ) : (
             author.name
@@ -51,11 +57,10 @@ const doiUrl = doi ? `https://doi.org/${doi}` : undefined;
       </p>
     )
   }
-</div>
+</article>
 
 <style>
   .card {
-    display: block;
     border: 1px solid #ddd;
     padding: 18px 20px;
     color: inherit;
@@ -91,6 +96,7 @@ const doiUrl = doi ? `https://doi.org/${doi}` : undefined;
     font-size: 0.85rem;
     color: #555;
     margin: 0 0 4px;
+    line-height: 1.4;
   }
 
   :global(.dark) .authors {
