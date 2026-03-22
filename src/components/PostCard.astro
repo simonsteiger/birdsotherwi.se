@@ -34,7 +34,7 @@ const formattedDate = pubDate.toLocaleDateString("en-GB", {
   }
 
   .card:hover {
-    border-color: #222;
+    background-color: #f7f7f7f7;
   }
 
   :global(.dark) .card {
@@ -42,7 +42,7 @@ const formattedDate = pubDate.toLocaleDateString("en-GB", {
   }
 
   :global(.dark) .card:hover {
-    border-color: #aaa;
+    background-color: #35373B;
   }
 
   .title {
@@ -75,6 +75,14 @@ const formattedDate = pubDate.toLocaleDateString("en-GB", {
     background: #f0f0f0; /* filled pill — approved in design mockup; tags are not links */
     font-family: "JuliaMono-Light", monospace;
     color: #444;
+  }
+
+  .card:hover .tag {
+    background: #e0e0e0;
+  }
+
+  :global(.dark) .card:hover .tag {
+    background: #555;
   }
 
   :global(.dark) .tag {

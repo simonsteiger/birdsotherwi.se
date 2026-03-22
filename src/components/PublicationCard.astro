@@ -1,0 +1,127 @@
+---
+import { AUTHOR_ORCID } from "../config";
+import { authorshipOverrides } from "../data/authorshipOverrides";
+
+interface Author {
+  name: string;
+  orcid: string | null;
+}
+
+interface Props {
+  title: string;
+  authors: Author[];
+  journal?: string;
+  year: number;
+  doi?: string;
+}
+
+const { title, authors, journal, year, doi } = Astro.props;
+const doiUrl = doi ? `https://doi.org/${doi}` : undefined;
+const override = doi ? authorshipOverrides[doi] : undefined;
+---
+
+<article class="card">
+  {
+    doiUrl && (
+      <a
+        href={doiUrl}
+        class="card-link"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`${title} (opens in new tab)`}
+      />
+    )
+  }
+  <span class="title">{title}</span>
+  <p class="authors">
+    {
+      authors.map((author, i) => {
+        const isUser = author.orcid === AUTHOR_ORCID;
+        const showFirst =
+          override?.sharedFirst && (isUser || i === 0);
+        const showLast =
+          override?.sharedLast && (isUser || i === authors.length - 1);
+        return (
+          <>
+            {i > 0 && ", "}
+            {isUser ? (
+              <strong>{author.name}{showFirst && <sup>1</sup>}{showLast && <sup>2</sup>}</strong>
+            ) : (
+              <>{author.name}{showFirst && <sup>1</sup>}{showLast && <sup>2</sup>}</>
+            )}
+          </>
+        );
+      })
+    }
+  </p>
+  {
+    (journal || year) && (
+      <p class="venue">
+        {journal && <span>{journal}</span>}
+        {journal && <span> · </span>}
+        <span>{year}</span>
+      </p>
+    )
+  }
+</article>
+
+<style>
+  .card {
+    position: relative;
+    border: 1px solid #ddd;
+    padding: 18px 20px;
+    color: inherit;
+    transition: border-color 0.1s;
+  }
+
+  .card:hover {
+    background-color: #f7f7f7f7;
+  }
+
+  :global(.dark) .card {
+    border-color: #444;
+  }
+
+  :global(.dark) .card:hover {
+    background-color: #35373B;
+  }
+
+  .card-link {
+    position: absolute;
+    inset: 0;
+  }
+
+  .card-link:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: -2px;
+  }
+
+  .title {
+    display: block;
+    font-size: 1rem;
+    font-weight: 400;
+    margin-bottom: 8px;
+    color: inherit;
+  }
+
+  .authors {
+    font-size: 0.85rem;
+    color: #555;
+    margin: 0 0 4px;
+    line-height: 1.4;
+  }
+
+  :global(.dark) .authors {
+    color: #aaa;
+  }
+
+  .venue {
+    font-size: 0.78rem;
+    color: #888;
+    margin: 0;
+  }
+
+  :global(.dark) .venue {
+    color: #999;
+  }
+</style>
