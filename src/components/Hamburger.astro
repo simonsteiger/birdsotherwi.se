@@ -5,3 +5,13 @@ import Icon from "./Icon.astro";
 <div class="hamburger">
   <Icon icon="text-indent" size="2.25em" />
 </div>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const hamburger = document.querySelector(".hamburger");
+    const navLinks = document.querySelector(".nav-links");
+    hamburger?.addEventListener("click", () => {
+      navLinks?.classList.toggle("expanded");
+    });
+  });
+</script>
